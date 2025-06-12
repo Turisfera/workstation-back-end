@@ -1,0 +1,6 @@
+@turisfera_workstation_back_end_HostAddress = http://localhost:5054
+
+GET {{turisfera_workstation_back_end_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
