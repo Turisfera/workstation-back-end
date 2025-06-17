@@ -1,0 +1,20 @@
+﻿using workstation_back_end.Experience.Domain.Models.Commands;
+
+namespace workstation_back_end.Experience.Interfaces.REST.Resources;
+
+public record ExperienceResource (    
+    int Id,
+    string Title,
+    string Description,
+    string Location,
+    int Duration,
+    decimal Price,
+    string Frequencies,
+    int Rating,
+    int CategoryId,
+    List<ExperienceImageResource> ExperienceImages,
+    List<IncludeResource> Includes, 
+    List<ScheduleResource> Schedule)
+{
+    
+}
