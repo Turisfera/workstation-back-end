@@ -12392,31 +12392,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\melga\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\María Patricia\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\tripmatch-backend\\workstation-back-end\\workstation-back-end.csproj",
+      "projectUniqueName": "C:\\UPC-5-Ciclo\\Aplicaciones-Web\\Turisfera\\Repositorio5\\workstation-back-end\\workstation-back-end\\workstation-back-end.csproj",
       "projectName": "workstation-back-end",
-      "projectPath": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\tripmatch-backend\\workstation-back-end\\workstation-back-end.csproj",
-      "packagesPath": "C:\\Users\\melga\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\tripmatch-backend\\workstation-back-end\\obj\\",
+      "projectPath": "C:\\UPC-5-Ciclo\\Aplicaciones-Web\\Turisfera\\Repositorio5\\workstation-back-end\\workstation-back-end\\workstation-back-end.csproj",
+      "packagesPath": "C:\\Users\\María Patricia\\.nuget\\packages\\",
+      "outputPath": "C:\\UPC-5-Ciclo\\Aplicaciones-Web\\Turisfera\\Repositorio5\\workstation-back-end\\workstation-back-end\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\melga\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\María Patricia\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -12505,7 +12498,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\María Patricia\\.dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
