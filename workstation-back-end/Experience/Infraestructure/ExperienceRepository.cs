@@ -21,4 +21,15 @@ public class ExperienceRepository : BaseRepository<Experience>, IExperienceRepos
             .Include(e => e.Schedules)
             .ToListAsync();
     }
+    
+
+    public async Task<IEnumerable<Experience>> ListByCategoryIdAsync(int categoryId)
+    {
+        return await _context.Set<Experience>()
+            .Where(e => e.CategoryId == categoryId && e.IsActive)
+            .Include(e => e.ExperienceImages)
+            .Include(e => e.Includes)
+            .Include(e => e.Schedules)
+            .ToListAsync();
+    }
 }

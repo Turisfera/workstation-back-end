@@ -9,6 +9,10 @@ namespace workstation_back_end.Experience.Domain.Models.Queries
         {
             return await experienceRepository.ListAsync();
         }
+        public async Task<IEnumerable<Entities.Experience>> Handle(GetExperiencesByCategoryQuery query)
+        {
+            return await experienceRepository.ListByCategoryIdAsync(query.CategoryId);
+        }
     }
     
 }

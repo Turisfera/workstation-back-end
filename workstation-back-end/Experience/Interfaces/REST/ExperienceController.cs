@@ -76,4 +76,13 @@ public class ExperienceController : ControllerBase
             return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
         }
     }
+    
+    [HttpGet("category/{categoryId:int}")]
+    public async Task<IActionResult> GetByCategory(int categoryId)
+    {
+        var query = new GetExperiencesByCategoryQuery(categoryId);
+        var experiences = await _experienceQueryService.Handle(query);
+        var resources = experiences.Select(ExperienceResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
+    }
 }

@@ -12398,11 +12398,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\workstation-back-end\\workstation-back-end\\workstation-back-end\\workstation-back-end.csproj",
+      "projectUniqueName": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\tripmatch-backend\\workstation-back-end\\workstation-back-end.csproj",
       "projectName": "workstation-back-end",
-      "projectPath": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\workstation-back-end\\workstation-back-end\\workstation-back-end\\workstation-back-end.csproj",
+      "projectPath": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\tripmatch-backend\\workstation-back-end\\workstation-back-end.csproj",
       "packagesPath": "C:\\Users\\melga\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\workstation-back-end\\workstation-back-end\\workstation-back-end\\obj\\",
+      "outputPath": "C:\\Users\\melga\\Desktop\\UPC-5\\Aplicaciones web\\Final\\tripmatch-backend\\workstation-back-end\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
