@@ -242,6 +242,122 @@
             Clase estática para transformar la entidad Booking a su recurso correspondiente.
             </summary>
         </member>
+        <member name="M:workstation_back_end.Reviews.Domain.IReviewRepository.FindByAgencyIdAsync(System.Int32)">
+            <summary>
+            Encuentra todas las reseñas escritas sobre una agencia específica.
+            </summary>
+            <param name="agencyId">El ID de la agencia.</param>
+            <returns>Una colección de reseñas para la agencia.</returns>
+        </member>
+        <member name="T:workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand">
+            <summary>
+            Comando para crear una nueva reseña sobre una agencia.
+            </summary>
+            <param name="TouristId">ID del usuario turista que escribe la reseña.</param>
+            <param name="AgencyId">ID de la agencia que está siendo reseñada.</param>
+            <param name="Rating">Calificación en estrellas (ej. 1-5).</param>
+            <param name="Comment">Comentario de la reseña.</param>
+        </member>
+        <member name="M:workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand.#ctor(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Comando para crear una nueva reseña sobre una agencia.
+            </summary>
+            <param name="TouristId">ID del usuario turista que escribe la reseña.</param>
+            <param name="AgencyId">ID de la agencia que está siendo reseñada.</param>
+            <param name="Rating">Calificación en estrellas (ej. 1-5).</param>
+            <param name="Comment">Comentario de la reseña.</param>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand.TouristId">
+            <summary>ID del usuario turista que escribe la reseña.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand.AgencyId">
+            <summary>ID de la agencia que está siendo reseñada.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand.Rating">
+            <summary>Calificación en estrellas (ej. 1-5).</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand.Comment">
+            <summary>Comentario de la reseña.</summary>
+        </member>
+        <member name="T:workstation_back_end.Reviews.Domain.Models.Queries.GetReviewsByAgencyIdQuery">
+            <summary>
+            Consulta para obtener todas las reseñas de una agencia específica.
+            </summary>
+            <param name="AgencyId">El ID de la agencia cuyas reseñas se quieren obtener.</param>
+        </member>
+        <member name="M:workstation_back_end.Reviews.Domain.Models.Queries.GetReviewsByAgencyIdQuery.#ctor(System.Int32)">
+            <summary>
+            Consulta para obtener todas las reseñas de una agencia específica.
+            </summary>
+            <param name="AgencyId">El ID de la agencia cuyas reseñas se quieren obtener.</param>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Domain.Models.Queries.GetReviewsByAgencyIdQuery.AgencyId">
+            <summary>El ID de la agencia cuyas reseñas se quieren obtener.</summary>
+        </member>
+        <member name="M:workstation_back_end.Reviews.Domain.Services.IReviewCommandService.Handle(workstation_back_end.Reviews.Domain.Models.Commands.CreateReviewCommand)">
+            <summary>
+            Maneja el comando para crear una nueva reseña.
+            </summary>
+            <param name="command">El comando con los datos de la reseña.</param>
+            <returns>La entidad de la reseña creada o null si falla la creación.</returns>
+        </member>
+        <member name="M:workstation_back_end.Reviews.Domain.Services.IReviewQueryService.Handle(workstation_back_end.Reviews.Domain.Models.Queries.GetReviewsByAgencyIdQuery)">
+            <summary>
+            Maneja la consulta para obtener todas las reseñas de una agencia.
+            </summary>
+            <param name="query">La consulta con el ID de la agencia.</param>
+            <returns>Una colección de reseñas.</returns>
+        </member>
+        <member name="T:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource">
+            <summary>
+            Recurso que representa una reseña para las respuestas de la API.
+            </summary>
+            <param name="Id">ID de la reseña.</param>
+            <param name="Rating">Calificación dada.</param>
+            <param name="Comment">Comentario.</param>
+            <param name="Date">Fecha de la reseña.</param>
+            <param name="TouristId">ID del turista que escribió la reseña.</param>
+            <param name="TouristName">Nombre del turista (para conveniencia).</param>
+            <param name="TouristAvatarUrl">URL del avatar del turista (para conveniencia).</param>
+            <param name="AgencyId">ID de la agencia reseñada.</param>
+        </member>
+        <member name="M:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.#ctor(System.Int32,System.Int32,System.String,System.DateTime,System.Int32,System.String,System.String,System.Int32)">
+            <summary>
+            Recurso que representa una reseña para las respuestas de la API.
+            </summary>
+            <param name="Id">ID de la reseña.</param>
+            <param name="Rating">Calificación dada.</param>
+            <param name="Comment">Comentario.</param>
+            <param name="Date">Fecha de la reseña.</param>
+            <param name="TouristId">ID del turista que escribió la reseña.</param>
+            <param name="TouristName">Nombre del turista (para conveniencia).</param>
+            <param name="TouristAvatarUrl">URL del avatar del turista (para conveniencia).</param>
+            <param name="AgencyId">ID de la agencia reseñada.</param>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.Id">
+            <summary>ID de la reseña.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.Rating">
+            <summary>Calificación dada.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.Comment">
+            <summary>Comentario.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.Date">
+            <summary>Fecha de la reseña.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.TouristId">
+            <summary>ID del turista que escribió la reseña.</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.TouristName">
+            <summary>Nombre del turista (para conveniencia).</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.TouristAvatarUrl">
+            <summary>URL del avatar del turista (para conveniencia).</summary>
+        </member>
+        <member name="P:workstation_back_end.Reviews.Interfaces.REST.Resources.ReviewResource.AgencyId">
+            <summary>ID de la agencia reseñada.</summary>
+        </member>
         <member name="M:workstation_back_end.Shared.Infraestructure.Persistence.Repositories.BaseRepository`1.AddAsync(`0)">
             <inheritdoc />
         </member>

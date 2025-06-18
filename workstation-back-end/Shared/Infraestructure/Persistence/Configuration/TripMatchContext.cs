@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workstation_back_end.Experience.Domain.Models.Entities;
 using workstation_back_end.Bookings.Domain.Models.Entities;
+using workstation_back_end.Reviews.Domain.Models.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 {
@@ -10,6 +11,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
@@ -19,6 +21,16 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<Review>(entity =>
+            {
+                entity.ToTable("Reviews");
+                entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Rating).IsRequired();
+                entity.Property(r => r.Comment).IsRequired().HasMaxLength(1000);
+                entity.Property(r => r.Date).IsRequired();
+                entity.Property(r => r.AgencyId).IsRequired();
+            });
             builder.Entity<Booking>(entity =>
             {
                 entity.ToTable("Bookings"); 
