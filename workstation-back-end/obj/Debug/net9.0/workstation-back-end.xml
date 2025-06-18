@@ -4,6 +4,244 @@
         <name>workstation-back-end</name>
     </assembly>
     <members>
+        <member name="M:workstation_back_end.Bookings.Domain.IBookingRepository.FindByTouristIdAsync(System.Int32)">
+            <summary>
+            Encuentra todas las reservas realizadas por un turista específico.
+            </summary>
+            <param name="touristId">El ID del usuario turista.</param>
+            <returns>Una colección de reservas del turista.</returns>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.IBookingRepository.FindByAgencyIdAsync(System.Int32)">
+            <summary>
+            Encuentra todas las reservas asociadas a las experiencias de una agencia específica.
+            </summary>
+            <param name="agencyId">El ID del usuario agencia.</param>
+            <returns>Una colección de reservas para la agencia.</returns>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand">
+            <summary>
+            Comando para registrar una nueva reserva.
+            Contiene toda la información necesaria que el frontend debe enviar.
+            </summary>
+            <param name="TouristId">ID del usuario que realiza la reserva.</param>
+            <param name="ExperienceId">ID de la experiencia que se está reservando.</param>
+            <param name="BookingDate">Fecha para la cual se hace la reserva.</param>
+            <param name="NumberOfPeople">Cantidad de personas para la reserva.</param>
+            <param name="Price">Precio total de la reserva.</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand.#ctor(System.Int32,System.Int32,System.DateTime,System.Int32,System.Decimal)">
+            <summary>
+            Comando para registrar una nueva reserva.
+            Contiene toda la información necesaria que el frontend debe enviar.
+            </summary>
+            <param name="TouristId">ID del usuario que realiza la reserva.</param>
+            <param name="ExperienceId">ID de la experiencia que se está reservando.</param>
+            <param name="BookingDate">Fecha para la cual se hace la reserva.</param>
+            <param name="NumberOfPeople">Cantidad de personas para la reserva.</param>
+            <param name="Price">Precio total de la reserva.</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand.TouristId">
+            <summary>ID del usuario que realiza la reserva.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand.ExperienceId">
+            <summary>ID de la experiencia que se está reservando.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand.BookingDate">
+            <summary>Fecha para la cual se hace la reserva.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand.NumberOfPeople">
+            <summary>Cantidad de personas para la reserva.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand.Price">
+            <summary>Precio total de la reserva.</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Models.Commands.DeleteBookingCommand">
+            <summary>
+            Comando para eliminar una reserva.
+            </summary>
+            <param name="BookingId">ID de la reserva a eliminar.</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Models.Commands.DeleteBookingCommand.#ctor(System.Int32)">
+            <summary>
+            Comando para eliminar una reserva.
+            </summary>
+            <param name="BookingId">ID de la reserva a eliminar.</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.DeleteBookingCommand.BookingId">
+            <summary>ID de la reserva a eliminar.</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Models.Commands.UpdateBookingStatusCommand">
+            <summary>
+            Comando específico para actualizar el estado de una reserva.
+            </summary>
+            <param name="BookingId">ID de la reserva que se va a modificar.</param>
+            <param name="NewStatus">El nuevo estado (ej. "Completada", "Cancelada").</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Models.Commands.UpdateBookingStatusCommand.#ctor(System.Int32,System.String)">
+            <summary>
+            Comando específico para actualizar el estado de una reserva.
+            </summary>
+            <param name="BookingId">ID de la reserva que se va a modificar.</param>
+            <param name="NewStatus">El nuevo estado (ej. "Completada", "Cancelada").</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.UpdateBookingStatusCommand.BookingId">
+            <summary>ID de la reserva que se va a modificar.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Commands.UpdateBookingStatusCommand.NewStatus">
+            <summary>El nuevo estado (ej. "Completada", "Cancelada").</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingByIdQuery">
+            <summary>
+            Consulta para obtener una reserva específica por su ID.
+            </summary>
+            <param name="BookingId">ID de la reserva a buscar.</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingByIdQuery.#ctor(System.Int32)">
+            <summary>
+            Consulta para obtener una reserva específica por su ID.
+            </summary>
+            <param name="BookingId">ID de la reserva a buscar.</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingByIdQuery.BookingId">
+            <summary>ID de la reserva a buscar.</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByAgencyIdQuery">
+            <summary>
+            Consulta para obtener todas las reservas de las experiencias que pertenecen a una agencia.
+            </summary>
+            <param name="AgencyId">ID del usuario de la agencia.</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByAgencyIdQuery.#ctor(System.Int32)">
+            <summary>
+            Consulta para obtener todas las reservas de las experiencias que pertenecen a una agencia.
+            </summary>
+            <param name="AgencyId">ID del usuario de la agencia.</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByAgencyIdQuery.AgencyId">
+            <summary>ID del usuario de la agencia.</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByTouristIdQuery">
+            <summary>
+            Consulta para obtener todas las reservas de un turista específico.
+            </summary>
+            <param name="TouristId">ID del usuario turista.</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByTouristIdQuery.#ctor(System.Int32)">
+            <summary>
+            Consulta para obtener todas las reservas de un turista específico.
+            </summary>
+            <param name="TouristId">ID del usuario turista.</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByTouristIdQuery.TouristId">
+            <summary>ID del usuario turista.</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Services.IBookingCommandService">
+            <summary>
+            Interfaz para los servicios de comandos de Booking. Define las operaciones que modifican el estado.
+            </summary>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Services.IBookingCommandService.Handle(workstation_back_end.Bookings.Domain.Models.Commands.CreateBookingCommand)">
+            <summary>
+            Maneja el comando para crear una nueva reserva.
+            </summary>
+            <param name="command">El comando con los datos de la reserva.</param>
+            <returns>La entidad de la reserva creada o null si falla.</returns>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Services.IBookingCommandService.Handle(workstation_back_end.Bookings.Domain.Models.Commands.UpdateBookingStatusCommand)">
+            <summary>
+            Maneja el comando para actualizar el estado de una reserva.
+            </summary>
+            <param name="command">El comando con el ID de la reserva y el nuevo estado.</param>
+            <returns>La entidad de la reserva actualizada o null si no se encuentra.</returns>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Services.IBookingCommandService.Handle(workstation_back_end.Bookings.Domain.Models.Commands.DeleteBookingCommand)">
+            <summary>
+            Maneja el comando para eliminar una reserva.
+            </summary>
+            <param name="command">El comando con el ID de la reserva a eliminar.</param>
+            <returns>True si la eliminación fue exitosa, de lo contrario false.</returns>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Domain.Services.IBookingQueryService">
+            <summary>
+            Interfaz para los servicios de consulta de Booking. Define las operaciones de solo lectura.
+            </summary>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Services.IBookingQueryService.Handle(workstation_back_end.Bookings.Domain.Models.Queries.GetBookingByIdQuery)">
+            <summary>
+            Maneja la consulta para obtener una reserva por su ID.
+            </summary>
+            <param name="query">La consulta con el ID de la reserva.</param>
+            <returns>La entidad de la reserva o null si no se encuentra.</returns>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Services.IBookingQueryService.Handle(workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByTouristIdQuery)">
+            <summary>
+            Maneja la consulta para obtener todas las reservas de un turista.
+            </summary>
+            <param name="query">La consulta con el ID del turista.</param>
+            <returns>Una colección de las reservas del turista.</returns>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Domain.Services.IBookingQueryService.Handle(workstation_back_end.Bookings.Domain.Models.Queries.GetBookingsByAgencyIdQuery)">
+            <summary>
+            Maneja la consulta para obtener todas las reservas de una agencia.
+            </summary>
+            <param name="query">La consulta con el ID de la agencia.</param>
+            <returns>Una colección de las reservas de la agencia.</returns>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource">
+            <summary>
+            Recurso que representa una reserva para las respuestas de la API.
+            </summary>
+            <param name="Id">ID de la reserva.</param>
+            <param name="BookingDate">Fecha de la reserva.</param>
+            <param name="NumberOfPeople">Número de personas.</param>
+            <param name="Price">Precio total.</param>
+            <param name="Status">Estado actual de la reserva.</param>
+            <param name="ExperienceId">ID de la experiencia reservada.</param>
+            <param name="ExperienceTitle">Título de la experiencia .</param>
+            <param name="TouristId">ID del turista que hizo la reserva.</param>
+        </member>
+        <member name="M:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.#ctor(System.Int32,System.DateTime,System.Int32,System.Decimal,System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            Recurso que representa una reserva para las respuestas de la API.
+            </summary>
+            <param name="Id">ID de la reserva.</param>
+            <param name="BookingDate">Fecha de la reserva.</param>
+            <param name="NumberOfPeople">Número de personas.</param>
+            <param name="Price">Precio total.</param>
+            <param name="Status">Estado actual de la reserva.</param>
+            <param name="ExperienceId">ID de la experiencia reservada.</param>
+            <param name="ExperienceTitle">Título de la experiencia .</param>
+            <param name="TouristId">ID del turista que hizo la reserva.</param>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.Id">
+            <summary>ID de la reserva.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.BookingDate">
+            <summary>Fecha de la reserva.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.NumberOfPeople">
+            <summary>Número de personas.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.Price">
+            <summary>Precio total.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.Status">
+            <summary>Estado actual de la reserva.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.ExperienceId">
+            <summary>ID de la experiencia reservada.</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.ExperienceTitle">
+            <summary>Título de la experiencia .</summary>
+        </member>
+        <member name="P:workstation_back_end.Bookings.Interfaces.REST.Resources.BookingResource.TouristId">
+            <summary>ID del turista que hizo la reserva.</summary>
+        </member>
+        <member name="T:workstation_back_end.Bookings.Interfaces.REST.Transform.BookingAssembler">
+            <summary>
+            Clase estática para transformar la entidad Booking a su recurso correspondiente.
+            </summary>
+        </member>
         <member name="M:workstation_back_end.Shared.Infraestructure.Persistence.Repositories.BaseRepository`1.AddAsync(`0)">
             <inheritdoc />
         </member>

@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "yaSIWe7cG0DITwj3Y8Osok/etJwfPtfW2o7M/K7qA/k=",
-  "Source": "workstation-back-end",
-  "BasePath": "_content/workstation-back-end",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"yaSIWe7cG0DITwj3Y8Osok/etJwfPtfW2o7M/K7qA/k=","Source":"workstation-back-end","BasePath":"_content/workstation-back-end","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

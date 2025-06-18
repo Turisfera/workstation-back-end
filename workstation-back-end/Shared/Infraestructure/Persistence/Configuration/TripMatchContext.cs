@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workstation_back_end.Experience.Domain.Models.Entities;
+using workstation_back_end.Bookings.Domain.Models.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 {
@@ -8,6 +9,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Experience.Domain.Models.Entities.Experience> Experiences { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
@@ -17,8 +19,19 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            // Experience Entity Configuration
+            builder.Entity<Booking>(entity =>
+            {
+                entity.ToTable("Bookings"); 
+                entity.HasKey(b => b.Id);   
+                entity.Property(b => b.BookingDate).IsRequired();
+                entity.Property(b => b.NumberOfPeople).IsRequired();
+                entity.Property(b => b.Status).IsRequired().HasMaxLength(50);
+                entity.Property(b => b.Price).IsRequired(); 
+                entity.HasOne(b => b.Experience) 
+                    .WithMany() 
+                    .HasForeignKey(b => b.ExperienceId) 
+                    .IsRequired(); 
+            });
             builder.Entity<Experience.Domain.Models.Entities.Experience>(entity =>
             {
                 entity.ToTable("Experiences");

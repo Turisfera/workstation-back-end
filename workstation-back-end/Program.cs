@@ -10,6 +10,11 @@ using workstation_back_end.Experience.Domain.Services;
 using workstation_back_end.Shared.Domain.Repositories;
 using workstation_back_end.Shared.Infraestructure.Persistence.Configuration;
 using workstation_back_end.Shared.Infraestructure.Persistence.Repositories;
+using workstation_back_end.Bookings.Domain;
+using workstation_back_end.Bookings.Infrastructure;
+using workstation_back_end.Bookings.Domain.Services;
+using workstation_back_end.Bookings.Application.BookingCommandService;
+using workstation_back_end.Bookings.Application.BookingQueryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +55,9 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
 builder.Services.AddScoped<IExperienceCommandService, ExperienceCommandService>();
 builder.Services.AddScoped<IExperienceQueryService, ExperienceQueryService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingCommandService, BookingCommandService>();
+builder.Services.AddScoped<IBookingQueryService, BookingQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExperienceCommandValidator>();
 builder.WebHost.UseUrls("http://localhost:5000");
 
