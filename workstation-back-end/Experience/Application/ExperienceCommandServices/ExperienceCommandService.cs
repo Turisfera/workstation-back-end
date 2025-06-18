@@ -24,6 +24,10 @@ public class ExperienceCommandService(
     {
         ArgumentNullException.ThrowIfNull(command);
         
+        var validationResult = await _validator.ValidateAsync(command);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+        
         var experience = new Domain.Models.Entities.Experience(
             command.Title,
             command.Description,

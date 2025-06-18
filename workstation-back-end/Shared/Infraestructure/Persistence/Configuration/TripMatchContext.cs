@@ -36,7 +36,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.Property(e => e.Location)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(60);
 
                 entity.Property(e => e.Frequencies)
                     .HasMaxLength(100);
