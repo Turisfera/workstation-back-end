@@ -13,18 +13,39 @@
         <PackageReference Include="EntityFrameworkCore.CreatedUpdatedDate" Version="8.0.0" />
         <PackageReference Include="FluentValidation" Version="12.0.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.6" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
         <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Shared\Application\" />
-      <Folder Include="Shared\Presentation\" />
+      <Compile Remove="Shared\Application\**" />
+      <Compile Remove="Shared\Presentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Shared\Application\**" />
+      <EmbeddedResource Remove="Shared\Presentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Shared\Application\**" />
+      <Content Remove="Shared\Presentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Shared\Application\**" />
+      <None Remove="Shared\Presentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Security\Infrastructure\" />
     </ItemGroup>
 
 </Project>
