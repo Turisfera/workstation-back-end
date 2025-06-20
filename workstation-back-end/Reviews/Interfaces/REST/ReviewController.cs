@@ -8,8 +8,8 @@ using workstation_back_end.Reviews.Interfaces.REST.Transform;
 namespace workstation_back_end.Reviews.Interfaces.REST
 {
     /// <summary>
-    /// API Controller para la gestión de reseñas.
-    /// Permite crear y consultar reseñas asociadas a agencias.
+    /// API Controller for managing reviews.
+    /// It allows creating and querying reviews associated with agencies.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -28,7 +28,7 @@ namespace workstation_back_end.Reviews.Interfaces.REST
         }
 
         /// <summary>
-        /// Crea una nueva reseña para una reserva completada.
+        /// Creates a new review for a completed booking.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -38,11 +38,12 @@ namespace workstation_back_end.Reviews.Interfaces.REST
         ///        "touristId": 123,
         ///        "agencyId": 45,
         ///        "rating": 4.7,
-        ///        "comment": "Excelente servicio y guía muy amable."
+        ///        "comment": "Excellent service and very friendly guide."
         ///     }
         /// </remarks>
-        /// <response code="201">Devuelve la reseña recién creada</response>
-        /// <response code="400">Si no se pudo crear la reseña (por ejemplo, sin reserva completada)</response>
+        /// <param name="command">The command object for creating the review.</param>
+        /// <response code="201">Returns the newly created review.</response>
+        /// <response code="400">If the review could not be created (e.g., no completed booking exists).</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -50,17 +51,17 @@ namespace workstation_back_end.Reviews.Interfaces.REST
         {
             var review = await _reviewCommandService.Handle(command);
             if (review is null)
-                return BadRequest("No se pudo crear la reseña. Verifique si el turista tiene una reserva completada con esta agencia.");
+                return BadRequest("Could not create the review. Verify if the tourist has a completed booking with this agency.");
 
             var resource = ReviewAssembler.ToResourceFromEntity(review);
             return StatusCode(201, resource);
         }
 
         /// <summary>
-        /// Obtiene todas las reseñas registradas para una agencia.
+        /// Gets all registered reviews for a specific agency.
         /// </summary>
-        /// <param name="agencyId">ID de la agencia</param>
-        /// <response code="200">Devuelve la lista de reseñas de la agencia</response>
+        /// <param name="agencyId">The agency's ID.</param>
+        /// <response code="200">Returns the list of reviews for the agency.</response>
         [HttpGet("agency/{agencyId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetReviewsByAgency(int agencyId)

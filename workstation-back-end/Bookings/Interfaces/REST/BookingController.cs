@@ -8,8 +8,8 @@ using workstation_back_end.Bookings.Interfaces.REST.Transform;
 namespace workstation_back_end.Bookings.Interfaces.REST
 {
     /// <summary>
-    /// API Controller para la gestión de reservas.
-    /// Permite crear, consultar y eliminar reservas de turistas y agencias.
+    /// API Controller for managing bookings.
+    /// It allows creating, querying, and deleting bookings for tourists and agencies.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -28,23 +28,26 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         }
 
         /// <summary>
-        /// Crea una nueva reserva.
+        /// Creates a new booking.
         /// </summary>
         /// <remarks>
+        /// Note: The `CreateBookingCommand` class must have properties that match this JSON structure.
+        /// <br/>
         /// Sample request:
         ///
         ///     POST /api/v1/Booking
         ///     {
-        ///        "touristId": 123,
-        ///        "agencyId": 45,
-        ///        "experienceId": 67,
-        ///        "startDate": "2025-07-01T09:00:00",
-        ///        "endDate": "2025-07-01T12:00:00",
-        ///        "participants": 4
+        ///        "touristId": 1,
+        ///        "experienceId": 1,
+        ///        "bookingDate": "2025-06-20T20:27:19.030Z",
+        ///        "numberOfPeople": 2,
+        ///        "price": 250.50
         ///     }
+        ///
         /// </remarks>
-        /// <response code="201">Devuelve la reserva recién creada</response>
-        /// <response code="400">Error de validación o datos inválidos</response>
+        /// <param name="command">The command object to create a booking.</param>
+        /// <response code="201">Returns the newly created booking.</response>
+        /// <response code="400">If the command is invalid or the booking could not be created.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -52,18 +55,18 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         {
             var booking = await _bookingCommandService.Handle(command);
             if (booking is null)
-                return BadRequest("No se pudo crear la reserva.");
+                return BadRequest("Could not create the booking.");
 
             var resource = BookingAssembler.ToResourceFromEntity(booking);
             return CreatedAtAction(nameof(GetBookingById), new { bookingId = resource.Id }, resource);
         }
 
         /// <summary>
-        /// Obtiene una reserva por su ID.
+        /// Gets a booking by its ID.
         /// </summary>
-        /// <param name="bookingId">ID de la reserva</param>
-        /// <response code="200">Devuelve la reserva solicitada</response>
-        /// <response code="404">Si no existe la reserva con ese ID</response>
+        /// <param name="bookingId">The booking ID.</param>
+        /// <response code="200">Returns the requested booking.</response>
+        /// <response code="404">If the booking with the specified ID does not exist.</response>
         [HttpGet("{bookingId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,17 +75,17 @@ namespace workstation_back_end.Bookings.Interfaces.REST
             var query = new GetBookingByIdQuery(bookingId);
             var booking = await _bookingQueryService.Handle(query);
             if (booking is null)
-                return NotFound($"No se encontró la reserva con ID {bookingId}.");
+                return NotFound($"Booking with ID {bookingId} not found.");
 
             var resource = BookingAssembler.ToResourceFromEntity(booking);
             return Ok(resource);
         }
 
         /// <summary>
-        /// Obtiene todas las reservas de un turista específico.
+        /// Gets all bookings for a specific tourist.
         /// </summary>
-        /// <param name="touristId">ID del turista</param>
-        /// <response code="200">Devuelve la lista de reservas del turista</response>
+        /// <param name="touristId">The tourist's ID.</param>
+        /// <response code="200">Returns the list of bookings for the tourist.</response>
         [HttpGet("tourist/{touristId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBookingsByTourist(int touristId)
@@ -94,10 +97,10 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         }
 
         /// <summary>
-        /// Obtiene todas las reservas de una agencia específica.
+        /// Gets all bookings for a specific agency.
         /// </summary>
-        /// <param name="agencyId">ID de la agencia</param>
-        /// <response code="200">Devuelve la lista de reservas de la agencia</response>
+        /// <param name="agencyId">The agency's ID.</param>
+        /// <response code="200">Returns the list of bookings for the agency.</response>
         [HttpGet("agency/{agencyId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBookingsByAgency(int agencyId)
@@ -109,11 +112,11 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         }
 
         /// <summary>
-        /// Elimina una reserva por su ID.
+        /// Deletes a booking by its ID.
         /// </summary>
-        /// <param name="bookingId">ID de la reserva</param>
-        /// <response code="204">Reserva eliminada correctamente</response>
-        /// <response code="404">Si no existe la reserva con ese ID</response>
+        /// <param name="bookingId">The ID of the booking to delete.</param>
+        /// <response code="204">If the booking was deleted successfully.</response>
+        /// <response code="404">If the booking with the specified ID does not exist.</response>
         [HttpDelete("{bookingId:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -122,7 +125,7 @@ namespace workstation_back_end.Bookings.Interfaces.REST
             var command = new DeleteBookingCommand(bookingId);
             var result = await _bookingCommandService.Handle(command);
             if (!result)
-                return NotFound($"No se encontró la reserva con ID {bookingId}.");
+                return NotFound($"Booking with ID {bookingId} not found.");
 
             return NoContent();
         }
