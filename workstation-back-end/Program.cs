@@ -17,6 +17,7 @@ using System.Text;
 using workstation_back_end.Experience.Infraestructure;
 using workstation_back_end.Inquiry.Application.CommandServices;
 using workstation_back_end.Inquiry.Application.QueryServices;
+using workstation_back_end.Inquiry.Domain.Models.Commands;
 using workstation_back_end.Inquiry.Domain.Services;
 using workstation_back_end.Inquiry.Domain.Services.Models.Validators;
 using workstation_back_end.Inquiry.Domain.Services.Services;
@@ -131,6 +132,11 @@ builder.Services.AddScoped<IInquiryCommandService, InquiryCommandService>();
 builder.Services.AddScoped<IInquiryQueryService, InquiryQueryService>();
 builder.Services.AddScoped<IInquiryRepository, InquiryRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateInquiryCommandValidator>();
+
+builder.Services.AddScoped<IResponseCommandService, ResponseCommandService>();
+builder.Services.AddScoped<IResponseQueryService, ResponseQueryService>();
+builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
+builder.Services.AddScoped<IValidator<CreateResponseCommand>, CreateResponseCommandValidator>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

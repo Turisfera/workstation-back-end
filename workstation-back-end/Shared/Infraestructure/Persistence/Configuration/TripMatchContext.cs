@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workstation_back_end.Experience.Domain.Models.Entities;
+using workstation_back_end.Inquiry.Domain.Models.Entities;
 using workstation_back_end.Users.Domain.Models.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
@@ -146,16 +147,46 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.HasKey(i => i.Id);
 
-                entity.Property(i => i.Question).HasMaxLength(500);
-                entity.Property(i => i.Answer).HasMaxLength(500);
-
-                entity.HasOne(i => i.Experience)
-                    .WithMany() 
-                    .HasForeignKey(i => i.ExperienceId);
+                entity.Property(i => i.Question).HasMaxLength(500).IsRequired();
+                entity.Property(i => i.AskedAt).IsRequired();
 
                 entity.HasOne(i => i.Usuario)
                     .WithMany()
                     .HasForeignKey(i => i.UserId);
+
+                entity.HasOne(i => i.Experience)
+                    .WithMany()
+                    .HasForeignKey(i => i.ExperienceId);
+
+                entity.HasOne(i => i.Response)
+                    .WithOne(r => r.Inquiry)
+                    .HasForeignKey<Response>(r => r.InquiryId);
+            });
+
+            builder.Entity<Response>(entity =>
+            {
+                entity.ToTable("Responses");
+
+                entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Answer).HasMaxLength(500).IsRequired();
+                entity.Property(r => r.AnsweredAt).IsRequired();
+
+                entity.Property(r => r.ResponderId)
+                    .HasColumnType("char(36)") 
+                    .IsRequired();
+
+                entity.HasOne(r => r.Responder)
+                    .WithMany()
+                    .HasForeignKey(r => r.ResponderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(r => r.Inquiry)
+                    .WithOne(i => i.Response)
+                    .HasForeignKey<Response>(r => r.InquiryId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(r => r.InquiryId).IsUnique(); 
             });
         }
         

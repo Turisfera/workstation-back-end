@@ -11,9 +11,6 @@ public class InquiryResourceFromEntityAssembler
             entity.ExperienceId,
             entity.UserId,
             entity.Question,
-            entity.Answer,
-            entity.IsAnswered,
-            entity.AskedAt,
-            entity.AnsweredAt);
+            entity.AskedAt);
     }
 }

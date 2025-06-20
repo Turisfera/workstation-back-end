@@ -10,11 +10,9 @@ public class Inquiry : BaseEntity
 
     public Guid UserId { get; set; } 
     public Usuario Usuario { get; set; }
-
-    public bool? IsAnswered { get; set; }
-    public string? Question { get; set; }
-    public string? Answer { get; set; }
+    
+    public string Question { get; set; } = string.Empty;
 
     public DateTime? AskedAt { get; set; }
-    public DateTime? AnsweredAt { get; set; }
+    public Response? Response { get; set; }
 }
