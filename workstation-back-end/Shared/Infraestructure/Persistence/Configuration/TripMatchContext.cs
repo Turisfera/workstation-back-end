@@ -2,6 +2,8 @@
 using workstation_back_end.Experience.Domain.Models.Entities;
 using workstation_back_end.Inquiry.Domain.Models.Entities;
 using workstation_back_end.Users.Domain.Models.Entities;
+using workstation_back_end.Bookings.Domain.Models.Entities;
+using workstation_back_end.Reviews.Domain.Models.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 {
@@ -11,6 +13,8 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Inquiry.Domain.Models.Entities.Inquiry> Inquiries { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
@@ -47,18 +51,39 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.Duration)
                     .IsRequired();
 
-                entity.Property(e => e.Rating)
+                entity.Property(e => e.Price)
                     .IsRequired()
-                    .HasColumnType("DECIMAL(2,1)"); 
+                    .HasColumnType("DECIMAL(10,2)");
 
                 entity.Property(e => e.Rating)
                     .IsRequired();
 
                 entity.HasIndex(e => e.Title)
                       .IsUnique();
-                
             });
-            
+            builder.Entity<Review>(entity =>
+            {
+                entity.ToTable("Reviews");
+                entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Rating).IsRequired();
+                entity.Property(r => r.Comment).IsRequired().HasMaxLength(1000);
+                entity.Property(r => r.Date).IsRequired();
+                entity.Property(r => r.AgencyId).IsRequired();
+            });
+            builder.Entity<Booking>(entity =>
+            {
+                entity.ToTable("Bookings"); 
+                entity.HasKey(b => b.Id);   
+                entity.Property(b => b.BookingDate).IsRequired();
+                entity.Property(b => b.NumberOfPeople).IsRequired();
+                entity.Property(b => b.Status).IsRequired().HasMaxLength(50);
+                entity.Property(b => b.Price).IsRequired(); 
+                entity.HasOne(b => b.Experience) 
+                    .WithMany() 
+                    .HasForeignKey(b => b.ExperienceId) 
+                    .IsRequired(); 
+            }); 
             builder.Entity<Category>(entity =>
             {
                 entity.ToTable("Categories");
@@ -118,7 +143,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.AgencyName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Ruc).IsRequired().HasMaxLength(11);
                 entity.Property(e => e.Description).HasMaxLength(500);
-                entity.Property(e => e.Rating).HasColumnType("DECIMAL(2,1)");
+                entity.Property(e => e.Rating);
                 entity.Property(e => e.ReviewCount);
                 entity.Property(e => e.ReservationCount);
                 entity.Property(e => e.AvatarUrl).HasMaxLength(255);

@@ -31,6 +31,13 @@ using workstation_back_end.Users.Infrastructure;
 using workstation_back_end.Users.Application.CommandServices;
 using workstation_back_end.Users.Application.QueryServices;
 using workstation_back_end.Users.Domain.Models.Validadors;
+
+using workstation_back_end.Bookings.Domain;
+using workstation_back_end.Bookings.Infrastructure;
+using workstation_back_end.Bookings.Domain.Services;
+using workstation_back_end.Bookings.Application.BookingCommandService;
+using workstation_back_end.Bookings.Application.BookingQueryService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Swagger
@@ -97,7 +104,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization(); // NECESARIO para evitar el error de UseAuthorization()
+builder.Services.AddAuthorization(); 
 
 // Base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -118,7 +125,6 @@ builder.Services.AddDbContext<TripMatchContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IExperienceCommandService, ExperienceCommandService>();
 builder.Services.AddScoped<IExperienceQueryService, ExperienceQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExperienceCommandValidator>();
@@ -128,6 +134,9 @@ builder.Services.AddScoped<IUserCommandService, UserCommandService>();
 builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidator>();
 
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingCommandService, BookingCommandService>();
+builder.Services.AddScoped<IBookingQueryService, BookingQueryService>();
 builder.Services.AddScoped<IInquiryCommandService, InquiryCommandService>();
 builder.Services.AddScoped<IInquiryQueryService, InquiryQueryService>();
 builder.Services.AddScoped<IInquiryRepository, InquiryRepository>();
