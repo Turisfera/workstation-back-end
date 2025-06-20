@@ -11,10 +11,18 @@ public static class AgenciaResourceAssembler
         return new AgenciaResource
         {
             UserId = agencia.UserId,
+            AgencyName = agencia.AgencyName,
             Ruc = agencia.Ruc,
-            Descripcion = agencia.Descripcion,
-            LinkFacebook = agencia.LinkFacebook,
-            LinkInstagram = agencia.LinkInstagram
+            Description = agencia.Description,
+            Rating = agencia.Rating,
+            ReviewCount = agencia.ReviewCount,
+            ReservationCount = agencia.ReservationCount,
+            AvatarUrl = agencia.AvatarUrl,
+            ContactEmail = agencia.ContactEmail,
+            ContactPhone = agencia.ContactPhone,
+            SocialLinkFacebook = agencia.SocialLinkFacebook,
+            SocialLinkInstagram = agencia.SocialLinkInstagram,
+            SocialLinkWhatsapp = agencia.SocialLinkWhatsapp
         };
     }
 }

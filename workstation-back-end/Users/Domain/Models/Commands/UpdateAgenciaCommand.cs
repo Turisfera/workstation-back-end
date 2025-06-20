@@ -1,0 +1,20 @@
+namespace workstation_back_end.Users.Domain.Models.Commands;
+
+public class UpdateAgenciaCommand
+{
+    public string? AgencyName { get; set; }
+    public string? Ruc { get; set; }
+    public string? Description { get; set; }
+    public string? AvatarUrl { get; set; }
+
+    public string? ContactEmail { get; set; }
+    public string? ContactPhone { get; set; }
+
+    public string? SocialLinkFacebook { get; set; }
+    public string? SocialLinkInstagram { get; set; }
+    public string? SocialLinkWhatsapp { get; set; }
+    
+    public float? Rating { get; set; }                // Agregado
+    public int? ReviewCount { get; set; }             // Agregado
+    public int? ReservationCount { get; set; }        // Agregado
+}

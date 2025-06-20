@@ -7,14 +7,19 @@ namespace workstation_back_end.Users.Domain.Models.Entities;
 /// </summary>
 public class Usuario : BaseEntity
 {
-    public Guid UserId { get; set; }           // UUID como clave primaria
-    public string Nombres { get; set; }
-    public string Apellidos { get; set; }
-    public int Telefono { get; set; }
-    public string Email { get; set; }   
-    public string Contrasena { get; set; }
+    public Guid UserId { get; set; }
 
-    // Relaciones (opcionalmente puedes añadir navegación más adelante)
-    public Agencia? Agencia { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+
+    public string LastName { get; set; } = string.Empty;
+
+    public string Number { get; set; } = string.Empty;
+
+    public string Email { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+
     public Turista? Turista { get; set; }
+
+    public Agencia? Agencia { get; set; }
 }

@@ -24,25 +24,66 @@ public class AuthService : IAuthService
 
     public async Task<Usuario> SignUpAsync(SignUpCommand command)
     {
-        // Verificar si el email ya está registrado
+        // Verificar duplicado por email
         var existingUser = await _usuarioRepository.FindByEmailAsync(command.Email);
         if (existingUser != null)
-            throw new InvalidOperationException("Este email ya está registrado.");
+            throw new InvalidOperationException("Este correo electrónico ya está registrado.");
 
         var hasher = new PasswordHasher<Usuario>();
+
+        // Crear usuario base
         var user = new Usuario
         {
             UserId = Guid.NewGuid(),
-            Nombres = command.Nombres,
-            Apellidos = command.Apellidos,
-            Telefono = command.Telefono,
-            Email = command.Email
+            FirstName = command.FirstName,
+            LastName = command.LastName,
+            Number = command.Number,
+            Email = command.Email,
+            CreatedDate = DateTime.UtcNow,
+            IsActive = true
         };
 
-        user.Contrasena = hasher.HashPassword(user, command.Contrasena);
+        user.Password = hasher.HashPassword(user, command.Password);
         await _usuarioRepository.AddAsync(user);
-        await _unitOfWork.CompleteAsync();
 
+        // Crear perfil según rol
+        if (command.Rol?.ToLower() == "agencia")
+        {
+            var agencia = new Agencia
+            {
+                UserId = user.UserId,
+                AgencyName = command.AgencyName ?? "",
+                Ruc = command.Ruc ?? "",
+                Description = "",
+                Rating = 0,
+                ReviewCount = 0,
+                ReservationCount = 0,
+                AvatarUrl = "",
+                ContactEmail = "",
+                ContactPhone = "",
+                SocialLinkFacebook = "",
+                SocialLinkInstagram = "",
+                SocialLinkWhatsapp = "",
+                CreatedDate = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            await _usuarioRepository.AddAgenciaAsync(agencia);
+        }
+        else if (command.Rol?.ToLower() == "turista")
+        {
+            var turista = new Turista
+            {
+                UserId = user.UserId,
+                AvatarUrl = "",
+                CreatedDate = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            await _usuarioRepository.AddTuristaAsync(turista);
+        }
+
+        await _unitOfWork.CompleteAsync();
         return user;
     }
 
@@ -53,7 +94,7 @@ public class AuthService : IAuthService
             throw new InvalidOperationException("Usuario no encontrado.");
 
         var hasher = new PasswordHasher<Usuario>();
-        var result = hasher.VerifyHashedPassword(user, user.Contrasena, command.Contrasena);
+        var result = hasher.VerifyHashedPassword(user, user.Password, command.Password);
 
         if (result == PasswordVerificationResult.Failed)
             throw new UnauthorizedAccessException("Contraseña incorrecta.");

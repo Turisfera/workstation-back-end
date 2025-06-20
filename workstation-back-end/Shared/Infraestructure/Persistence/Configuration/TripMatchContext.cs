@@ -82,11 +82,13 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.HasKey(e => e.UserId);
                 entity.Property(e => e.UserId).IsRequired();
 
-                entity.Property(e => e.Nombres).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.Apellidos).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.Telefono).IsRequired();
-                entity.Property(e => e.Email).IsRequired().HasMaxLength(30);
-                entity.Property(e => e.Contrasena).IsRequired().HasMaxLength(500);
+              
+                entity.Property(e => e.FirstName).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.LastName).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Number).IsRequired().HasMaxLength(15);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Password).IsRequired().HasMaxLength(500);
+
 
                 entity.HasIndex(e => e.Email).IsUnique();
 
@@ -101,26 +103,39 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                     .HasForeignKey<Turista>(t => t.UserId);
             });
 
+            // Agencia
             builder.Entity<Agencia>(entity =>
             {
                 entity.ToTable("Agencias");
 
-                entity.HasKey(a => a.UserId);
-                entity.Property(a => a.Ruc).IsRequired().HasMaxLength(11);
-                entity.Property(a => a.Descripcion).IsRequired();
-                entity.Property(a => a.LinkFacebook).HasMaxLength(20);
-                entity.Property(a => a.LinkInstagram).HasMaxLength(20);
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).IsRequired();
+
+                entity.Property(e => e.UserId).IsRequired();
+                entity.Property(e => e.AgencyName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Ruc).IsRequired().HasMaxLength(11);
+                entity.Property(e => e.Description).HasMaxLength(500);
+                entity.Property(e => e.Rating);
+                entity.Property(e => e.ReviewCount);
+                entity.Property(e => e.ReservationCount);
+                entity.Property(e => e.AvatarUrl).HasMaxLength(255);
+                entity.Property(e => e.ContactEmail).HasMaxLength(100);
+                entity.Property(e => e.ContactPhone).HasMaxLength(20);
+                entity.Property(e => e.SocialLinkFacebook).HasMaxLength(100);
+                entity.Property(e => e.SocialLinkInstagram).HasMaxLength(100);
+                entity.Property(e => e.SocialLinkWhatsapp).HasMaxLength(100);
             });
 
+            // Turista
             builder.Entity<Turista>(entity =>
             {
                 entity.ToTable("Turistas");
 
-                entity.HasKey(t => t.UserId);
-                entity.Property(t => t.Edad).IsRequired();
-                entity.Property(t => t.Genero).IsRequired().HasMaxLength(10);
-                entity.Property(t => t.Idioma).IsRequired().HasMaxLength(20);
-                entity.Property(t => t.Preferencias).IsRequired().HasMaxLength(100);
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).IsRequired();
+
+                entity.Property(e => e.UserId).IsRequired();
+                entity.Property(e => e.AvatarUrl).HasMaxLength(255);
             });
         }
         

@@ -10,26 +10,26 @@ public class CreateUsuarioCommandValidator : AbstractValidator<CreateUsuarioComm
 {
     public CreateUsuarioCommandValidator()
     {
-        RuleFor(u => u.Nombres)
+        RuleFor(u => u.FirstName)
             .NotEmpty().WithMessage("El nombre es obligatorio.")
             .MaximumLength(50).WithMessage("Máximo 50 caracteres.");
 
-        RuleFor(u => u.Apellidos)
+        RuleFor(u => u.LastName)
             .NotEmpty().WithMessage("El apellido es obligatorio.")
             .MaximumLength(50).WithMessage("Máximo 50 caracteres.");
 
-        RuleFor(u => u.Telefono)
+        RuleFor(u => u.Number)
             .NotEmpty().WithMessage("El número de teléfono es obligatorio.")
-            .GreaterThan(0).WithMessage("Debe ser un número válido.");
+            .Matches(@"^\d{7,15}$").WithMessage("Debe contener entre 7 y 15 dígitos.");
 
         RuleFor(u => u.Email)
             .NotEmpty().WithMessage("El correo es obligatorio.")
             .EmailAddress().WithMessage("Formato de correo inválido.")
-            .MaximumLength(30);
+            .MaximumLength(100);
 
-        RuleFor(u => u.Contrasena)
+        RuleFor(u => u.Password)
             .NotEmpty().WithMessage("La contraseña es obligatoria.")
             .MinimumLength(6).WithMessage("Mínimo 6 caracteres.")
-            .MaximumLength(20).WithMessage("Máximo 20 caracteres.");
+            .MaximumLength(100).WithMessage("Máximo 100 caracteres.");
     }
 }

@@ -64,4 +64,14 @@ public class UsuarioRepository : IUsuarioRepository
             .Include(u => u.Agencia)
             .FirstOrDefaultAsync(u => u.Email == email);
     }
+    public void UpdateAgencia(Agencia agencia)
+    {
+        _context.Set<Agencia>().Update(agencia);
+    }
+
+    public void UpdateTurista(Turista turista)
+    {
+        _context.Set<Turista>().Update(turista);
+    }
+    
 }

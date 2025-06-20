@@ -11,10 +11,7 @@ public static class TuristaResourceAssembler
         return new TuristaResource
         {
             UserId = turista.UserId,
-            Edad = turista.Edad,
-            Genero = turista.Genero,
-            Idioma = turista.Idioma,
-            Preferencias = turista.Preferencias
+            AvatarUrl = turista.AvatarUrl
         };
     }
 }
