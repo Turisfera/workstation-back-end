@@ -5,12 +5,14 @@ namespace workstation_back_end.Security.Domain.Models.Commands;
 /// </summary>
 public class SignUpCommand
 {
-    public string Nombres { get; set; }
-    public string Apellidos { get; set; }
-    public int Telefono { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Number { get; set; }
     public string Email { get; set; }
-    public string Contrasena { get; set; }
+    public string Password { get; set; }
+    public string Rol { get; set; } // "turista" o "agencia"
 
-    // Tipo de usuario a registrar: "turista" o "agencia"
-    public string Rol { get; set; }
+    // Solo para agencias
+    public string? AgencyName { get; set; }
+    public string? Ruc { get; set; }
 }

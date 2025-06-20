@@ -7,37 +7,39 @@ using workstation_back_end.Users.Interfaces.REST.Transform;
 
 namespace workstation_back_end.Users.Interfaces.REST;
 
-
 [ApiController]
 [Route("api/v1/users")]
 public class UsuarioController : ControllerBase
 {
-    private readonly IUserCommandService _commandService;
     private readonly IUserQueryService _queryService;
+    private readonly IUserCommandService _commandService;
 
-    public UsuarioController(IUserCommandService commandService, IUserQueryService queryService)
+    public UsuarioController(IUserQueryService queryService, IUserCommandService commandService)
     {
-        _commandService = commandService;
         _queryService = queryService;
+        _commandService = commandService;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateUsuario([FromBody] CreateUsuarioCommand command)
-    {
-        var usuario = await _commandService.Handle(command);
-        var resource = UsuarioResourceFromEntityAssembler.ToResource(usuario);
-        return CreatedAtAction(nameof(GetById), new { userId = usuario.UserId }, resource);
-    }
-
+    /// <summary>
+    /// Get a user by user ID
+    /// </summary>
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetById(Guid userId)
     {
-        var query = new GetUsuarioByIdQuery(userId);
-        var usuario = await _queryService.Handle(query);
-        if (usuario == null)
-            return NotFound();
+        var usuario = await _queryService.Handle(new GetUsuarioByIdQuery(userId));
+        if (usuario == null) return NotFound();
 
         var resource = UsuarioResourceFromEntityAssembler.ToResource(usuario);
         return Ok(resource);
+    }
+
+    /// <summary>
+    /// Soft delete a user by ID (mark as inactive)
+    /// </summary>
+    [HttpDelete("{userId:guid}")]
+    public async Task<IActionResult> Delete(Guid userId)
+    {
+        await _commandService.DeleteUsuarioAsync(userId);
+        return NoContent();
     }
 }

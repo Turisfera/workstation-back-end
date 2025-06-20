@@ -3,14 +3,14 @@ using workstation_back_end.Shared.Domain.Model.Entities;
 namespace workstation_back_end.Users.Domain.Models.Entities;
 
 
+/// <summary>
+/// Representa a un usuario con perfil de turista.
+/// </summary>
 public class Turista : BaseEntity
 {
-    public Guid UserId { get; set; }       // FK → Usuario
+    public Guid UserId { get; set; }
 
-    public int Edad { get; set; }
-    public string Genero { get; set; }
-    public string Idioma { get; set; }
-    public string Preferencias { get; set; }
+    public string? AvatarUrl { get; set; }
 
-    public Usuario Usuario { get; set; }
+    public Usuario? Usuario { get; set; }
 }

@@ -10,4 +10,7 @@ public interface IUsuarioRepository : IBaseRepository<Usuario>
     Task AddAgenciaAsync(Agencia agencia);
     Task AddTuristaAsync(Turista turista);
     Task<Usuario?> FindByEmailAsync(string email);
+    void UpdateAgencia(Agencia agencia);
+    void UpdateTurista(Turista turista);
+    void Remove(Usuario entity);
 }

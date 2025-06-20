@@ -11,10 +11,12 @@ public static class UsuarioResourceFromEntityAssembler
         return new UsuarioResource
         {
             UserId = usuario.UserId,
-            Nombres = usuario.Nombres,
-            Apellidos = usuario.Apellidos,
-            Telefono = usuario.Telefono,
-            Email = usuario.Email
+            FirstName = usuario.FirstName,
+            LastName = usuario.LastName,
+            Number = usuario.Number,
+            Email = usuario.Email,
+            EsAgencia = usuario.Agencia != null,
+            EsTurista = usuario.Turista != null
         };
     }
 }
