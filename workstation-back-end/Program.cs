@@ -129,6 +129,8 @@ builder.Services.AddScoped<IExperienceCommandService, ExperienceCommandService>(
 builder.Services.AddScoped<IExperienceQueryService, ExperienceQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExperienceCommandValidator>();
 
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUserCommandService, UserCommandService>();
 builder.Services.AddScoped<IUserQueryService, UserQueryService>();
