@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using workstation_back_end.Experience.Domain.Models.Entities;
 using workstation_back_end.Inquiry.Domain.Models.Entities;
 using workstation_back_end.Users.Domain.Models.Entities;
 using workstation_back_end.Bookings.Domain.Models.Entities;
 using workstation_back_end.Reviews.Domain.Models.Entities;
+using workstation_back_end.Shared.Domain.Model.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 {
@@ -24,7 +26,16 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            
+            void ConfigureBaseEntity<TEntity>(EntityTypeBuilder<TEntity> entity) where TEntity : BaseEntity
+            {
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired()
+                    .HasColumnType("datetime");
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime");
+                entity.Property(e => e.IsActive).IsRequired();
+            }
             // Experience Entity Configuration
             builder.Entity<Experience.Domain.Models.Entities.Experience>(entity =>
             {
@@ -60,6 +71,8 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.HasIndex(e => e.Title)
                       .IsUnique();
+                
+                ConfigureBaseEntity(entity);
             });
             builder.Entity<Review>(entity =>
             {
@@ -68,14 +81,15 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.Property(r => r.Rating).IsRequired();
                 entity.Property(r => r.Comment).IsRequired().HasMaxLength(1000);
-                entity.Property(r => r.Date).IsRequired();
+                entity.Property(r => r.Date).IsRequired().HasColumnType("DATETIME");
                 entity.Property(r => r.AgencyId).IsRequired();
+                ConfigureBaseEntity(entity);
             });
             builder.Entity<Booking>(entity =>
             {
                 entity.ToTable("Bookings"); 
                 entity.HasKey(b => b.Id);   
-                entity.Property(b => b.BookingDate).IsRequired();
+                entity.Property(b => b.BookingDate).IsRequired().HasColumnType("DATETIME");
                 entity.Property(b => b.NumberOfPeople).IsRequired();
                 entity.Property(b => b.Status).IsRequired().HasMaxLength(50);
                 entity.Property(b => b.Price).IsRequired(); 
@@ -83,6 +97,13 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                     .WithMany() 
                     .HasForeignKey(b => b.ExperienceId) 
                     .IsRequired(); 
+                ConfigureBaseEntity(entity);
+                entity.Property(b => b.TouristId)
+                    .IsRequired(); 
+                entity.HasOne(b => b.Tourist)
+                    .WithMany() 
+                    .HasForeignKey(b => b.TouristId);
+                ConfigureBaseEntity(entity);
             }); 
             builder.Entity<Category>(entity =>
             {
@@ -100,7 +121,6 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 .HasOne(e => e.Category)
                 .WithMany(c => c.Experiences)
                 .HasForeignKey(e => e.CategoryId);
-            
             
             
             builder.Entity<Usuario>(entity =>
@@ -129,6 +149,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.HasOne(u => u.Turista)
                     .WithOne(t => t.Usuario)
                     .HasForeignKey<Turista>(t => t.UserId);
+                ConfigureBaseEntity(entity);
             });
 
             // Agencia
@@ -152,6 +173,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.SocialLinkFacebook).HasMaxLength(100);
                 entity.Property(e => e.SocialLinkInstagram).HasMaxLength(100);
                 entity.Property(e => e.SocialLinkWhatsapp).HasMaxLength(100);
+                ConfigureBaseEntity(entity);
             });
 
             // Turista
@@ -164,6 +186,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.AvatarUrl).HasMaxLength(255);
+                ConfigureBaseEntity(entity);
             });
             //Inquiry
             builder.Entity<Inquiry.Domain.Models.Entities.Inquiry>(entity =>
@@ -173,7 +196,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.HasKey(i => i.Id);
 
                 entity.Property(i => i.Question).HasMaxLength(500).IsRequired();
-                entity.Property(i => i.AskedAt).IsRequired();
+                entity.Property(i => i.AskedAt).IsRequired().HasColumnType("datetime");
 
                 entity.HasOne(i => i.Usuario)
                     .WithMany()
@@ -186,6 +209,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.HasOne(i => i.Response)
                     .WithOne(r => r.Inquiry)
                     .HasForeignKey<Response>(r => r.InquiryId);
+                ConfigureBaseEntity(entity);
             });
 
             builder.Entity<Response>(entity =>
@@ -195,7 +219,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.HasKey(r => r.Id);
 
                 entity.Property(r => r.Answer).HasMaxLength(500).IsRequired();
-                entity.Property(r => r.AnsweredAt).IsRequired();
+                entity.Property(r => r.AnsweredAt).IsRequired().HasColumnType("datetime");
 
                 entity.Property(r => r.ResponderId)
                     .HasColumnType("char(36)") 
@@ -212,6 +236,49 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasIndex(r => r.InquiryId).IsUnique(); 
+                ConfigureBaseEntity(entity);
+            });
+            
+            builder.Entity<ExperienceImage>(entity =>
+            {
+                entity.ToTable("ExperienceImages");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Url).IsRequired();
+
+                entity.HasOne(e => e.Experience)
+                    .WithMany(exp => exp.ExperienceImages)
+                    .HasForeignKey(e => e.ExperienceId);
+
+                ConfigureBaseEntity(entity); 
+            });
+
+            builder.Entity<Include>(entity =>
+            {
+                entity.ToTable("Includes");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Description).IsRequired();
+
+                entity.HasOne(e => e.Experience)
+                    .WithMany(exp => exp.Includes)
+                    .HasForeignKey(e => e.ExperienceId);
+
+                ConfigureBaseEntity(entity); 
+            });
+
+            builder.Entity<Schedule>(entity =>
+            {
+                entity.ToTable("Schedules");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Time).IsRequired();
+
+                entity.HasOne(e => e.Experience)
+                    .WithMany(exp => exp.Schedules)
+                    .HasForeignKey(e => e.ExperienceId);
+
+                ConfigureBaseEntity(entity); 
             });
         }
         

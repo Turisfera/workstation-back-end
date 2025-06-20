@@ -14,21 +14,19 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Booking>> FindByTouristIdAsync(int touristId)
+    public async Task<IEnumerable<Booking>> FindByTouristIdAsync(Guid touristId)
     {
-
         return await _context.Bookings
             .Include(b => b.Experience)
-            .Where(b => b.UserId == touristId)
+            .Where(b => b.TouristId == touristId)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<Booking>> FindByAgencyIdAsync(int agencyId)
     {
-
         return await _context.Bookings
-            .Include(b => b.Experience) 
-            .Where(b => b.Experience.UserId == agencyId)
+            .Include(b => b.Experience)
+            .Where(b => b.Experience.CategoryId == agencyId) 
             .ToListAsync();
     }
 }

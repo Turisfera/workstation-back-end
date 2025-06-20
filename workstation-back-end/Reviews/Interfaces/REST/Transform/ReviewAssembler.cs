@@ -7,16 +7,15 @@ public static class ReviewAssembler
 {
     public static ReviewResource ToResourceFromEntity(Review entity)
     {
-        var touristName = "Usuario Anónimo";
-        
+        var touristName = "Usuario Anónimo"; 
         return new ReviewResource(
             entity.Id,
             entity.Rating,
             entity.Comment,
             entity.Date,
-            entity.UserId, 
+            entity.TouristId, 
             touristName,
-            null, 
+            null,
             entity.AgencyId
         );
     }

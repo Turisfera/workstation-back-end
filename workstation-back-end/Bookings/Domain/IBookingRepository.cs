@@ -12,7 +12,7 @@ public interface IBookingRepository : IBaseRepository<Booking>
      * <param name="touristId">El ID del usuario turista.</param>
      * <returns>Una colección de reservas del turista.</returns>
      */
-    Task<IEnumerable<Booking>> FindByTouristIdAsync(int touristId);
+    Task<IEnumerable<Booking>> FindByTouristIdAsync(Guid  touristId);
 
     /**
      * <summary>

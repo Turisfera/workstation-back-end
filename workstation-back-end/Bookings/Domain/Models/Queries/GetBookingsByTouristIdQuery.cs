@@ -6,4 +6,4 @@ namespace workstation_back_end.Bookings.Domain.Models.Queries;
  * </summary>
  * <param name="TouristId">ID del usuario turista.</param>
  */
-public record GetBookingsByTouristIdQuery(int TouristId);
+public record GetBookingsByTouristIdQuery(Guid TouristId);

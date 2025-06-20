@@ -23,9 +23,5 @@ public class BookingQueryService : IBookingQueryService
     {
         return await _bookingRepository.FindByTouristIdAsync(query.TouristId);
     }
-
-    public async Task<IEnumerable<Booking>> Handle(GetBookingsByAgencyIdQuery query)
-    {
-        return await _bookingRepository.FindByAgencyIdAsync(query.AgencyId);
-    }
+    
 }

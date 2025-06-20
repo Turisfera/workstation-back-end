@@ -12,8 +12,9 @@ namespace workstation_back_end.Bookings.Domain.Models.Commands;
  * <param name="Price">Precio total de la reserva.</param>
  */
 public record CreateBookingCommand(
-    int TouristId,
+    Guid TouristId,
     int ExperienceId,
     DateTime BookingDate,
     int NumberOfPeople,
-    decimal Price);
+    decimal Price
+);

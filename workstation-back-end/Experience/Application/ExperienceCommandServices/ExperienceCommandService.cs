@@ -42,10 +42,7 @@ public class ExperienceCommandService(
             command.Frequencies,
             command.Rating, 
             command.CategoryId
-            )
-        {
-            UserId = 1 
-        };
+            );
         
         command.ExperienceImages?.ForEach(img =>
         {

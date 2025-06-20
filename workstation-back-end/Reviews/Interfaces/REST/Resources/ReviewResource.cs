@@ -18,7 +18,8 @@ public record ReviewResource(
     int Rating,
     string Comment,
     DateTime Date,
-    int TouristId,
+    Guid TouristId,           
     string TouristName,
     string? TouristAvatarUrl,
-    int AgencyId);
+    int AgencyId
+    );

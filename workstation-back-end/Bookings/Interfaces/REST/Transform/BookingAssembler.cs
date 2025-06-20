@@ -14,7 +14,7 @@ public static class BookingAssembler
     {
 
         var experienceTitle = entity.Experience?.Title ?? "Título no disponible";
-        
+
         return new BookingResource(
             entity.Id,
             entity.BookingDate,
@@ -23,7 +23,7 @@ public static class BookingAssembler
             entity.Status,
             entity.ExperienceId,
             experienceTitle,
-            entity.UserId 
+            entity.TouristId
         );
     }
 }

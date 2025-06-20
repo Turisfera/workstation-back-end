@@ -84,28 +84,13 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         /// <summary>
         /// Gets all bookings for a specific tourist.
         /// </summary>
-        /// <param name="touristId">The tourist's ID.</param>
+        /// <param name="touristId">The tourist's ID (Guid).</param>
         /// <response code="200">Returns the list of bookings for the tourist.</response>
-        [HttpGet("tourist/{touristId:int}")]
+        [HttpGet("tourist/{touristId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetBookingsByTourist(int touristId)
+        public async Task<IActionResult> GetBookingsByTourist(Guid touristId)
         {
-            var query = new GetBookingsByTouristIdQuery(touristId);
-            var bookings = await _bookingQueryService.Handle(query);
-            var resources = bookings.Select(BookingAssembler.ToResourceFromEntity);
-            return Ok(resources);
-        }
-
-        /// <summary>
-        /// Gets all bookings for a specific agency.
-        /// </summary>
-        /// <param name="agencyId">The agency's ID.</param>
-        /// <response code="200">Returns the list of bookings for the agency.</response>
-        [HttpGet("agency/{agencyId:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetBookingsByAgency(int agencyId)
-        {
-            var query = new GetBookingsByAgencyIdQuery(agencyId);
+            var query = new GetBookingsByTouristIdQuery(touristId); // Asegúrate que este query también use Guid
             var bookings = await _bookingQueryService.Handle(query);
             var resources = bookings.Select(BookingAssembler.ToResourceFromEntity);
             return Ok(resources);

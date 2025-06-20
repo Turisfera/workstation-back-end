@@ -26,13 +26,5 @@ public interface IBookingQueryService
      * <returns>Una colección de las reservas del turista.</returns>
      */
     Task<IEnumerable<Models.Entities.Booking>> Handle(GetBookingsByTouristIdQuery query);
-
-    /**
-     * <summary>
-     * Maneja la consulta para obtener todas las reservas de una agencia.
-     * </summary>
-     * <param name="query">La consulta con el ID de la agencia.</param>
-     * <returns>Una colección de las reservas de la agencia.</returns>
-     */
-    Task<IEnumerable<Models.Entities.Booking>> Handle(GetBookingsByAgencyIdQuery query);
+    
 }

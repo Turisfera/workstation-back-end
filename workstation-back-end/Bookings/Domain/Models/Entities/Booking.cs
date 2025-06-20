@@ -5,28 +5,29 @@ namespace workstation_back_end.Bookings.Domain.Models.Entities;
 
 public class Booking : BaseEntity
 {
- 
     public DateTime BookingDate { get; set; }
     public int NumberOfPeople { get; set; }
-    
-    [Column(TypeName = "DECIMAL(10,2)")] 
     public decimal Price { get; set; }
-    
-    public string Status { get; set; } 
+    public string Status { get; set; } = string.Empty;
 
-
+    // Foreign keys
     public int ExperienceId { get; set; }
-    public Experience.Domain.Models.Entities.Experience Experience { get; set; }
-    
-    public Booking()
+    public Experience.Domain.Models.Entities.Experience Experience { get; set; } = null!;
+    public Guid TouristId { get; set; }            // <--- NUEVO
+    public workstation_back_end.Users.Domain.Models.Entities.Usuario Tourist { get; set; } = null!;
+
+    public Booking() { }
+
+    public Booking(
+        Guid touristId,
+        int experienceId,
+        DateTime bookingDate,
+        int numberOfPeople,
+        decimal price,
+        string status
+    )
     {
-        Status = string.Empty;
-        Experience = null!;
-    }
-    
-    public Booking(int userId, int experienceId, DateTime bookingDate, int numberOfPeople, decimal price, string status)
-    {
-        UserId = userId; 
+        TouristId = touristId;
         ExperienceId = experienceId;
         BookingDate = bookingDate;
         NumberOfPeople = numberOfPeople;

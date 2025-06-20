@@ -22,17 +22,16 @@ public class ReviewCommandService : IReviewCommandService
 
     public async Task<Review?> Handle(CreateReviewCommand command)
     {
-        // Un turista solo puede reseñar una agencia si tiene al menos una reserva completada con ella.
         var touristBookings = await _bookingRepository.FindByTouristIdAsync(command.TouristId);
-        var hasCompletedBookingWithAgency = touristBookings.Any(b => 
-            b.Experience.UserId == command.AgencyId && b.Status == "Completada");
+        
+        var hasCompletedBooking = touristBookings.Any(b => b.Status == "Completada");
 
-        if (!hasCompletedBookingWithAgency)
+        if (!hasCompletedBooking)
         {
-            Console.WriteLine("Error: El turista no tiene una reserva completada con esta agencia.");
+            Console.WriteLine("Error: El turista no tiene reservas completadas.");
             return null; 
         }
-        
+
         var review = new Review(
             command.TouristId,
             command.AgencyId,

@@ -5,21 +5,24 @@ namespace workstation_back_end.Reviews.Domain.Models.Entities;
 
 public class Review : BaseEntity
 {
+    public Guid TouristId { get; set; }      
+    public int AgencyId { get; set; }     
     public int Rating { get; set; }
-    public string Comment { get; set; }
+    public string Comment { get; set; } = string.Empty;
     public DateTime Date { get; set; }
-    public int AgencyId { get; set; }
-    public Review(int touristId, int agencyId, int rating, string comment)
+
+    public Review() { }
+
+    public Review(
+        Guid touristId, 
+        int agencyId, 
+        int rating, 
+        string comment)
     {
-        UserId = touristId;
+        TouristId = touristId;
         AgencyId = agencyId;
         Rating = rating;
         Comment = comment;
         Date = DateTime.UtcNow;
-    }
-
-    public Review()
-    {
-        Comment = string.Empty;
     }
 }
