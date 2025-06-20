@@ -7,7 +7,7 @@ public record CreateExperienceCommand(
     int Duration,
     decimal Price,
     string Frequencies,
-    int Rating,
+    decimal Rating,
     int CategoryId,
     List<ImageCommand> ExperienceImages,
     List<IncludeCommand> Includes, 

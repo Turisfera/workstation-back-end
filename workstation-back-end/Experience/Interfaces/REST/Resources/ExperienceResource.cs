@@ -10,7 +10,7 @@ public record ExperienceResource (
     int Duration,
     decimal Price,
     string Frequencies,
-    int Rating,
+    decimal Rating,
     int CategoryId,
     List<ExperienceImageResource> ExperienceImages,
     List<IncludeResource> Includes, 

@@ -14,7 +14,13 @@ using workstation_back_end.Shared.Infraestructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using workstation_back_end.Experience.Infraestructure;
+using workstation_back_end.Inquiry.Application.CommandServices;
+using workstation_back_end.Inquiry.Application.QueryServices;
+using workstation_back_end.Inquiry.Domain.Services;
+using workstation_back_end.Inquiry.Domain.Services.Models.Validators;
+using workstation_back_end.Inquiry.Domain.Services.Services;
+using workstation_back_end.Inquiry.Infraestructure;
 using workstation_back_end.Security.Domain.Services;
 using workstation_back_end.Security.Application.SecurityCommandServices;
 using workstation_back_end.Security.Application.TokenServices;
@@ -40,7 +46,7 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     
-    // ⬇️ Aquí se define el esquema de seguridad JWT
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -111,6 +117,7 @@ builder.Services.AddDbContext<TripMatchContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IExperienceCommandService, ExperienceCommandService>();
 builder.Services.AddScoped<IExperienceQueryService, ExperienceQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExperienceCommandValidator>();
@@ -120,6 +127,10 @@ builder.Services.AddScoped<IUserCommandService, UserCommandService>();
 builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidator>();
 
+builder.Services.AddScoped<IInquiryCommandService, InquiryCommandService>();
+builder.Services.AddScoped<IInquiryQueryService, InquiryQueryService>();
+builder.Services.AddScoped<IInquiryRepository, InquiryRepository>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateInquiryCommandValidator>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

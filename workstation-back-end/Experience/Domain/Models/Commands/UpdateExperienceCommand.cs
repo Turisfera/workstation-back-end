@@ -9,6 +9,6 @@ public record UpdateExperienceCommand
     public int Duration { get; set; }
     public decimal Price { get; set; }
     public string Frequencies { get; set; }
-    public int Rating { get; set; }
+    public decimal Rating { get; set; }
     public int CategoryId { get; set; }
 }

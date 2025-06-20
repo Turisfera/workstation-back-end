@@ -11,13 +11,14 @@ namespace workstation_back_end.Experience.Application.ExperienceCommandServices;
 public class ExperienceCommandService(
     IExperienceRepository experienceRepository,
     IUnitOfWork unitOfWork, 
+    ICategoryRepository categoryRepository,
     IValidator<CreateExperienceCommand> validator) : IExperienceCommandService
 {
     private readonly IExperienceRepository _experienceRepository =
             experienceRepository ?? throw new ArgumentNullException(nameof(experienceRepository));
     
     private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-    
+    private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
     private readonly IValidator<CreateExperienceCommand> _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     
     public async Task<Domain.Models.Entities.Experience> Handle(CreateExperienceCommand command)
@@ -27,6 +28,10 @@ public class ExperienceCommandService(
         var validationResult = await _validator.ValidateAsync(command);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
+        
+        var category = await _categoryRepository.FindByIdAsync(command.CategoryId);
+        if (category == null)
+            throw new ArgumentException($"Category with ID {command.CategoryId} does not exist.");
         
         var experience = new Domain.Models.Entities.Experience(
             command.Title,

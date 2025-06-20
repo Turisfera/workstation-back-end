@@ -6,7 +6,7 @@ namespace workstation_back_end.Experience.Domain.Models.Entities {
     {
         
         public Experience(string title, string description, string location, int duration,
-            decimal price, string frequencies, int rating, int categoryId)
+            decimal price, string frequencies, decimal rating, int categoryId)
         {
             Title = title;
             Description = description;
@@ -29,7 +29,7 @@ namespace workstation_back_end.Experience.Domain.Models.Entities {
         public int Duration { get; set; }
         public decimal Price { get; set; }
         public string Frequencies { get; set; }
-        public int Rating { get; set; }
+        public decimal Rating { get; set; }
         
         public int CategoryId { get; set; }
         public Category Category { get; set; }

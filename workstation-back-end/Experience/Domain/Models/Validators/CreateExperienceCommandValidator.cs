@@ -30,7 +30,8 @@ public class CreateExperienceCommandValidator  : AbstractValidator<CreateExperie
             .GreaterThanOrEqualTo(0).WithMessage("Price must be non-negative.");
 
         RuleFor(e => e.Rating)
-            .InclusiveBetween(1, 5).WithMessage("Rating must be between 1 and 5.");
+            .InclusiveBetween(1.0m, 5.0m) 
+            .WithMessage("Rating must be between 1 and 5.");
 
         RuleFor(e => e.CategoryId)
             .NotEmpty().WithMessage("Category is required.");

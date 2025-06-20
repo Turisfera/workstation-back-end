@@ -9,6 +9,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Experience.Domain.Models.Entities.Experience> Experiences { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Inquiry.Domain.Models.Entities.Inquiry> Inquiries { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
@@ -45,15 +46,16 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.Duration)
                     .IsRequired();
 
-                entity.Property(e => e.Price)
+                entity.Property(e => e.Rating)
                     .IsRequired()
-                    .HasColumnType("DECIMAL(10,2)");
+                    .HasColumnType("DECIMAL(2,1)"); 
 
                 entity.Property(e => e.Rating)
                     .IsRequired();
 
                 entity.HasIndex(e => e.Title)
                       .IsUnique();
+                
             });
             
             builder.Entity<Category>(entity =>
@@ -115,7 +117,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.AgencyName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Ruc).IsRequired().HasMaxLength(11);
                 entity.Property(e => e.Description).HasMaxLength(500);
-                entity.Property(e => e.Rating);
+                entity.Property(e => e.Rating).HasColumnType("DECIMAL(2,1)");
                 entity.Property(e => e.ReviewCount);
                 entity.Property(e => e.ReservationCount);
                 entity.Property(e => e.AvatarUrl).HasMaxLength(255);
@@ -136,6 +138,24 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.AvatarUrl).HasMaxLength(255);
+            });
+            //Inquiry
+            builder.Entity<Inquiry.Domain.Models.Entities.Inquiry>(entity =>
+            {
+                entity.ToTable("Inquiries");
+
+                entity.HasKey(i => i.Id);
+
+                entity.Property(i => i.Question).HasMaxLength(500);
+                entity.Property(i => i.Answer).HasMaxLength(500);
+
+                entity.HasOne(i => i.Experience)
+                    .WithMany() 
+                    .HasForeignKey(i => i.ExperienceId);
+
+                entity.HasOne(i => i.Usuario)
+                    .WithMany()
+                    .HasForeignKey(i => i.UserId);
             });
         }
         
