@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workstation_back_end.Experience.Domain.Models.Entities;
 using workstation_back_end.Users.Domain.Models.Entities;
+using workstation_back_end.Bookings.Domain.Models.Entities;
+using workstation_back_end.Reviews.Domain.Models.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 {
@@ -9,6 +11,8 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Experience.Domain.Models.Entities.Experience> Experiences { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
@@ -55,7 +59,29 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.HasIndex(e => e.Title)
                       .IsUnique();
             });
-            
+            builder.Entity<Review>(entity =>
+            {
+                entity.ToTable("Reviews");
+                entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Rating).IsRequired();
+                entity.Property(r => r.Comment).IsRequired().HasMaxLength(1000);
+                entity.Property(r => r.Date).IsRequired();
+                entity.Property(r => r.AgencyId).IsRequired();
+            });
+            builder.Entity<Booking>(entity =>
+            {
+                entity.ToTable("Bookings"); 
+                entity.HasKey(b => b.Id);   
+                entity.Property(b => b.BookingDate).IsRequired();
+                entity.Property(b => b.NumberOfPeople).IsRequired();
+                entity.Property(b => b.Status).IsRequired().HasMaxLength(50);
+                entity.Property(b => b.Price).IsRequired(); 
+                entity.HasOne(b => b.Experience) 
+                    .WithMany() 
+                    .HasForeignKey(b => b.ExperienceId) 
+                    .IsRequired(); 
+            }); 
             builder.Entity<Category>(entity =>
             {
                 entity.ToTable("Categories");
