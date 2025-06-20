@@ -11,6 +11,19 @@ using workstation_back_end.Shared.Domain.Repositories;
 using workstation_back_end.Shared.Infraestructure.Persistence.Configuration;
 using workstation_back_end.Shared.Infraestructure.Persistence.Repositories;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+using workstation_back_end.Security.Domain.Services;
+using workstation_back_end.Security.Application.SecurityCommandServices;
+using workstation_back_end.Security.Application.TokenServices;
+using workstation_back_end.Users.Domain;
+using workstation_back_end.Users.Domain.Services;
+using workstation_back_end.Users.Infrastructure;
+using workstation_back_end.Users.Application.CommandServices;
+using workstation_back_end.Users.Application.QueryServices;
+using workstation_back_end.Users.Domain.Models.Validadors;
 var builder = WebApplication.CreateBuilder(args);
 
 // Swagger
@@ -26,10 +39,58 @@ builder.Services.AddSwaggerGen(options =>
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    
+    // ⬇️ Aquí se define el esquema de seguridad JWT
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Ingresa tu token aquí con el formato: Bearer {token}"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 // Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter());
+});
+
+// === JWT Auth ===
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var key = builder.Configuration["Jwt:Key"];
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!))
+        };
+    });
+
+builder.Services.AddAuthorization(); // NECESARIO para evitar el error de UseAuthorization()
 
 // Base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -44,6 +105,8 @@ builder.Services.AddDbContext<TripMatchContext>(options =>
         .EnableDetailedErrors();
 });
 
+
+
 // Inyección de dependencias (Shared)
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -51,6 +114,15 @@ builder.Services.AddScoped<IExperienceRepository, ExperienceRepository>();
 builder.Services.AddScoped<IExperienceCommandService, ExperienceCommandService>();
 builder.Services.AddScoped<IExperienceQueryService, ExperienceQueryService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExperienceCommandValidator>();
+
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidator>();
+
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.WebHost.UseUrls("http://localhost:5000");
 
 var app = builder.Build();
@@ -67,6 +139,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication(); 
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
