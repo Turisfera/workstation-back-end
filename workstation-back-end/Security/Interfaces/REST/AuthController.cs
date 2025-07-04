@@ -68,18 +68,17 @@ public class AuthController : ControllerBase
     /// <param name="command">The command with login credentials (email and password).</param>
     /// <response code="200">Returns the JWT token and user's email.</response>
     /// <response code="401">Invalid credentials.</response>
-    [AllowAnonymous]
     [HttpPost("signin")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)] 
+    [AllowAnonymous]
     public async Task<IActionResult> SignIn([FromBody] SignInCommand command)
     {
-        var token = await _authService.SignInAsync(command);
+        var result = await _authService.SignInAsync(command);
+
         return Ok(new AuthResponseResource
         {
-            Token = token,
-            Email = command.Email,
-            Rol = "usuario"
+            Token = result.Token,
+            Email = result.Email,
+            Rol = result.Rol
         });
     }
 }

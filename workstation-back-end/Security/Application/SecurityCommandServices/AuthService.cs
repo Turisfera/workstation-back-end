@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using workstation_back_end.Security.Domain.Models.Commands;
+using workstation_back_end.Security.Domain.Models.Results;
 using workstation_back_end.Security.Domain.Services;
 using workstation_back_end.Users.Domain;
 using workstation_back_end.Users.Domain.Models.Entities;
@@ -87,7 +88,7 @@ public class AuthService : IAuthService
         return user;
     }
 
-    public async Task<string> SignInAsync(SignInCommand command)
+    public async Task<AuthResult> SignInAsync(SignInCommand command)
     {
         var user = await _usuarioRepository.FindByEmailAsync(command.Email);
         if (user == null)
@@ -99,6 +100,17 @@ public class AuthService : IAuthService
         if (result == PasswordVerificationResult.Failed)
             throw new UnauthorizedAccessException("Contraseña incorrecta.");
 
-        return _tokenService.GenerateToken(user);
+        var token = _tokenService.GenerateToken(user);
+        
+        string rol = user.Agencia != null ? "agencia" :
+            user.Turista != null ? "turista" :
+            "usuario";
+
+        return new AuthResult
+        {
+            Token = token,
+            Email = user.Email,
+            Rol = rol
+        };
     }
 }
