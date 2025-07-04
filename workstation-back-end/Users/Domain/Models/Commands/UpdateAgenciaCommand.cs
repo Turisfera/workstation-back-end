@@ -14,7 +14,7 @@ public class UpdateAgenciaCommand
     public string? SocialLinkInstagram { get; set; }
     public string? SocialLinkWhatsapp { get; set; }
     
-    public float? Rating { get; set; }                // Agregado
-    public int? ReviewCount { get; set; }             // Agregado
-    public int? ReservationCount { get; set; }        // Agregado
+    public float? Rating { get; set; }                
+    public int? ReviewCount { get; set; }         
+    public int? ReservationCount { get; set; }    
 }

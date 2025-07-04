@@ -16,6 +16,12 @@ public class ReviewQueryService : IReviewQueryService
 
     public async Task<IEnumerable<Review>> Handle(GetReviewsByAgencyIdQuery query)
     {
-        return await _reviewRepository.FindByAgencyIdAsync(query.AgencyId);
+
+        return await _reviewRepository.FindByAgencyUserIdAsync(query.AgencyUserId); 
+    }
+
+    public async Task<Review?> Handle(GetReviewByIdQuery query)
+    {
+        return await _reviewRepository.FindByIdAsync(query.ReviewId);
     }
 }

@@ -12,5 +12,12 @@ public interface IReviewRepository : IBaseRepository<Review>
      * <param name="agencyId">El ID de la agencia.</param>
      * <returns>Una colección de reseñas para la agencia.</returns>
      */
-    Task<IEnumerable<Review>> FindByAgencyIdAsync(int agencyId);
+    Task<IEnumerable<Review>> FindByAgencyUserIdAsync(Guid agencyUserId);
+
+    Task<Review?> FindByAgencyAndTouristUserAsync(Guid agencyUserId, Guid touristUserId);
+
+    Task<IEnumerable<Review>> FindAllReviewsForAgency(Guid agencyUserId); 
+    
+    Task<Review?> FindByIdAsync(int id);
+    
 }

@@ -18,6 +18,10 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        
+        public DbSet<Agencia> Agencias { get; set; } 
+        
+        public DbSet<Turista> Turistas { get; set; } 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
             base.OnConfiguring(builder);
@@ -66,11 +70,15 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                     .IsRequired()
                     .HasColumnType("DECIMAL(10,2)");
 
-                entity.Property(e => e.Rating)
-                    .IsRequired();
-
                 entity.HasIndex(e => e.Title)
                       .IsUnique();
+                
+                entity.Property(e => e.AgencyUserId).IsRequired(); 
+                
+                entity.HasOne(e => e.Agencia)
+                    .WithMany(a => a.Experiences) 
+                    .HasForeignKey(e => e.AgencyUserId) 
+                    .HasPrincipalKey(a => a.UserId);
                 
                 ConfigureBaseEntity(entity);
             });
@@ -81,8 +89,21 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.Property(r => r.Rating).IsRequired();
                 entity.Property(r => r.Comment).IsRequired().HasMaxLength(1000);
-                entity.Property(r => r.Date).IsRequired().HasColumnType("DATETIME");
-                entity.Property(r => r.AgencyId).IsRequired();
+                entity.Property(r => r.ReviewDate).IsRequired().HasColumnType("DATETIME");
+                
+                entity.Property(r => r.TouristUserId).IsRequired(); 
+                entity.Property(r => r.AgencyUserId).IsRequired();  
+                
+                entity.HasOne(r => r.TouristUser) 
+                    .WithMany() 
+                    .HasForeignKey(r => r.TouristUserId) 
+                    .HasPrincipalKey(u => u.UserId);
+                
+                entity.HasOne(r => r.Agency) 
+                    .WithMany() 
+                    .HasForeignKey(r => r.AgencyUserId) 
+                    .HasPrincipalKey(a => a.UserId); 
+
                 ConfigureBaseEntity(entity);
             });
             builder.Entity<Booking>(entity =>
@@ -93,6 +114,9 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(b => b.NumberOfPeople).IsRequired();
                 entity.Property(b => b.Status).IsRequired().HasMaxLength(50);
                 entity.Property(b => b.Price).IsRequired(); 
+                entity.Property(b => b.Time)
+                    .IsRequired()         
+                    .HasMaxLength(10); 
                 entity.HasOne(b => b.Experience) 
                     .WithMany() 
                     .HasForeignKey(b => b.ExperienceId) 
@@ -156,11 +180,11 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
             builder.Entity<Agencia>(entity =>
             {
                 entity.ToTable("Agencias");
+                
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.UserId).IsRequired(); 
+                
 
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).IsRequired();
-
-                entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.AgencyName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Ruc).IsRequired().HasMaxLength(11);
                 entity.Property(e => e.Description).HasMaxLength(500);
@@ -173,21 +197,33 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.SocialLinkFacebook).HasMaxLength(100);
                 entity.Property(e => e.SocialLinkInstagram).HasMaxLength(100);
                 entity.Property(e => e.SocialLinkWhatsapp).HasMaxLength(100);
-                ConfigureBaseEntity(entity);
+                ConfigureBaseEntity(entity); 
+                
+                entity.HasOne(a => a.Usuario)
+                    .WithOne(u => u.Agencia)
+                    .HasForeignKey<Agencia>(a => a.UserId) 
+                    .HasPrincipalKey<Usuario>(u => u.UserId); 
             });
+
 
             // Turista
             builder.Entity<Turista>(entity =>
             {
                 entity.ToTable("Turistas");
+                
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.UserId).IsRequired(); 
+                
 
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).IsRequired();
-
-                entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.AvatarUrl).HasMaxLength(255);
                 ConfigureBaseEntity(entity);
+                
+                entity.HasOne(t => t.Usuario)
+                    .WithOne(u => u.Turista)
+                    .HasForeignKey<Turista>(t => t.UserId) 
+                    .HasPrincipalKey<Usuario>(u => u.UserId); 
             });
+            
             //Inquiry
             builder.Entity<Inquiry.Domain.Models.Entities.Inquiry>(entity =>
             {

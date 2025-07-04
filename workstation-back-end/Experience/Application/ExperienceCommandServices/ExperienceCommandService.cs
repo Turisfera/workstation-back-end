@@ -5,6 +5,8 @@ using workstation_back_end.Experience.Domain.Models.Commands;
 using workstation_back_end.Experience.Domain.Models.Entities;
 using workstation_back_end.Experience.Domain.Services;
 using workstation_back_end.Shared.Domain.Repositories;
+using workstation_back_end.Users.Domain.Models.Queries;
+using workstation_back_end.Users.Domain.Services;
 
 namespace workstation_back_end.Experience.Application.ExperienceCommandServices;
 
@@ -12,6 +14,7 @@ public class ExperienceCommandService(
     IExperienceRepository experienceRepository,
     IUnitOfWork unitOfWork, 
     ICategoryRepository categoryRepository,
+    IUserQueryService userQueryService,
     IValidator<CreateExperienceCommand> validator) : IExperienceCommandService
 {
     private readonly IExperienceRepository _experienceRepository =
@@ -19,6 +22,7 @@ public class ExperienceCommandService(
     
     private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+    private readonly IUserQueryService _userQueryService = userQueryService;
     private readonly IValidator<CreateExperienceCommand> _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     
     public async Task<Domain.Models.Entities.Experience> Handle(CreateExperienceCommand command)
@@ -32,6 +36,11 @@ public class ExperienceCommandService(
         var category = await _categoryRepository.FindByIdAsync(command.CategoryId);
         if (category == null)
             throw new ArgumentException($"Category with ID {command.CategoryId} does not exist.");
+
+
+        var usuario = await _userQueryService.Handle(new GetUsuarioByIdQuery(command.AgencyUserId)); 
+        if (usuario?.Agencia == null) 
+            throw new ArgumentException($"Agency with User ID {command.AgencyUserId} does not exist or is not an agency.");
         
         var experience = new Domain.Models.Entities.Experience(
             command.Title,
@@ -40,8 +49,8 @@ public class ExperienceCommandService(
             command.Duration,
             command.Price,
             command.Frequencies,
-            command.Rating, 
-            command.CategoryId
+            command.CategoryId,          
+            command.AgencyUserId
             );
         
         command.ExperienceImages?.ForEach(img =>
@@ -98,7 +107,6 @@ public class ExperienceCommandService(
         experience.Duration = command.Duration;
         experience.Price = command.Price;
         experience.Frequencies = command.Frequencies;
-        experience.Rating = command.Rating;
         experience.CategoryId = command.CategoryId;
         experience.ModifiedDate = DateTime.UtcNow;
 

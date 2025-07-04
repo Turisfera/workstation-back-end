@@ -5,6 +5,7 @@ namespace workstation_back_end.Inquiry.Domain.Models.Entities;
 
 public class Response : BaseEntity
 {
+    public int Id { get; set; }
     public int InquiryId { get; set; }
     public Inquiry Inquiry { get; set; }
 

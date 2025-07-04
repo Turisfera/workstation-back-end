@@ -37,6 +37,15 @@ using workstation_back_end.Bookings.Infrastructure;
 using workstation_back_end.Bookings.Domain.Services;
 using workstation_back_end.Bookings.Application.BookingCommandService;
 using workstation_back_end.Bookings.Application.BookingQueryService;
+using workstation_back_end.Bookings.Domain.Models.Commands;
+using workstation_back_end.Bookings.Domain.Models.Validators;
+using workstation_back_end.Reviews.Application.ReviewCommandService;
+using workstation_back_end.Reviews.Application.ReviewQueryService;
+using workstation_back_end.Reviews.Domain;
+using workstation_back_end.Reviews.Domain.Models.Commands;
+using workstation_back_end.Reviews.Domain.Models.Validators;
+using workstation_back_end.Reviews.Domain.Services;
+using workstation_back_end.Reviews.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -139,6 +148,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidat
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingCommandService, BookingCommandService>();
 builder.Services.AddScoped<IBookingQueryService, BookingQueryService>();
+builder.Services.AddScoped<IValidator<CreateBookingCommand>, CreateBookingCommandValidator>();
+
 builder.Services.AddScoped<IInquiryCommandService, InquiryCommandService>();
 builder.Services.AddScoped<IInquiryQueryService, InquiryQueryService>();
 builder.Services.AddScoped<IInquiryRepository, InquiryRepository>();
@@ -148,6 +159,11 @@ builder.Services.AddScoped<IResponseCommandService, ResponseCommandService>();
 builder.Services.AddScoped<IResponseQueryService, ResponseQueryService>();
 builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
 builder.Services.AddScoped<IValidator<CreateResponseCommand>, CreateResponseCommandValidator>();
+
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewCommandService, ReviewCommandService>();
+builder.Services.AddScoped<IReviewQueryService, ReviewQueryService>();
+builder.Services.AddScoped<IValidator<CreateReviewCommand>, CreateReviewCommandValidator>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

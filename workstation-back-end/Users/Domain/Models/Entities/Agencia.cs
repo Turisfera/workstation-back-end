@@ -35,4 +35,6 @@ public class Agencia : BaseEntity
     public string? SocialLinkWhatsapp { get; set; }
 
     public Usuario? Usuario { get; set; }
+    
+    public ICollection<workstation_back_end.Experience.Domain.Models.Entities.Experience> Experiences { get; set; } = new List<workstation_back_end.Experience.Domain.Models.Entities.Experience>();
 }

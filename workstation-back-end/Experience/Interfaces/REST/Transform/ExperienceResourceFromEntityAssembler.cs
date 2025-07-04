@@ -27,7 +27,7 @@ public static class ExperienceResourceFromEntityAssembler
         
         
         return new ExperienceResource(experience.Id ,experience.Title, experience.Description, experience.Location, experience.Duration,experience.Price,
-            experience.Frequencies, experience.Rating,  experience.CategoryId, images, includes, schedule);
+            experience.Frequencies, experience.CategoryId, images, includes, schedule);
     }
     
 }

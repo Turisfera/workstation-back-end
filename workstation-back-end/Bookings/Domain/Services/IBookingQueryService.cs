@@ -27,4 +27,6 @@ public interface IBookingQueryService
      */
     Task<IEnumerable<Models.Entities.Booking>> Handle(GetBookingsByTouristIdQuery query);
     
+    Task<IEnumerable<Models.Entities.Booking>> Handle(GetAllBookingsQuery query);
+    
 }

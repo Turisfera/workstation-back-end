@@ -23,7 +23,7 @@ public static class BookingAssembler
             entity.Status,
             entity.ExperienceId,
             experienceTitle,
-            entity.TouristId
+            entity.TouristId, entity.Time
         );
     }
 }

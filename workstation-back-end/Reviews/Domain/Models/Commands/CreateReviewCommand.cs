@@ -10,8 +10,8 @@ namespace workstation_back_end.Reviews.Domain.Models.Commands;
  * <param name="Comment">Comentario de la reseña.</param>
  */
 public record CreateReviewCommand(
-    Guid TouristId,    
-    int AgencyId,
+    Guid TouristUserId,    
+    Guid AgencyUserId,
     int Rating,
     string Comment
 );

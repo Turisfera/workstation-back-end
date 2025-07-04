@@ -7,8 +7,8 @@ public record CreateExperienceCommand(
     int Duration,
     decimal Price,
     string Frequencies,
-    decimal Rating,
     int CategoryId,
+    Guid AgencyUserId,
     List<ImageCommand> ExperienceImages,
     List<IncludeCommand> Includes, 
     List<ScheduleCommand> Schedules)

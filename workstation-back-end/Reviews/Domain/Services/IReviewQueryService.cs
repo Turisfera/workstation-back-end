@@ -13,4 +13,5 @@ public interface IReviewQueryService
      * <returns>Una colección de reseñas.</returns>
      */
     Task<IEnumerable<Review>> Handle(GetReviewsByAgencyIdQuery query);
+    Task<Review?> Handle(GetReviewByIdQuery query);
 }

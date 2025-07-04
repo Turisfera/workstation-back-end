@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using workstation_back_end.Bookings.Domain.Models.Commands;
 using workstation_back_end.Bookings.Domain.Models.Queries;
@@ -37,11 +38,10 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         ///
         ///     POST /api/v1/Booking
         ///     {
-        ///        "touristId": 1,
+        ///        "touristId": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
         ///        "experienceId": 1,
-        ///        "bookingDate": "2025-06-20T20:27:19.030Z",
+        ///        "bookingDate": "2025-06-20T00:00:00.000Z",
         ///        "numberOfPeople": 2,
-        ///        "price": 250.50
         ///     }
         ///
         /// </remarks>
@@ -51,15 +51,52 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateBooking([FromBody] CreateBookingCommand command)
         {
-            var booking = await _bookingCommandService.Handle(command);
-            if (booking is null)
-                return BadRequest("Could not create the booking.");
+            try
+            {
+                var booking = await _bookingCommandService.Handle(command);
+                
+                if (booking is null) 
+                {
+                    return BadRequest("The reservation could not be created due to an unknown issue or invalid data.");
+                }
 
-            var resource = BookingAssembler.ToResourceFromEntity(booking);
-            return CreatedAtAction(nameof(GetBookingById), new { bookingId = resource.Id }, resource);
+                var resource = BookingAssembler.ToResourceFromEntity(booking);
+                return CreatedAtAction(nameof(GetBookingById), new { bookingId = resource.Id }, resource);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(error => new
+                {
+                    field = error.PropertyName,
+                    message = error.ErrorMessage
+                });
+
+                return BadRequest(new
+                {
+                    message = "Validation failed.",
+                    errors = errors
+                });
+            }
+
+            catch (ArgumentException ex) 
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ApplicationException ex) 
+            {
+                Console.WriteLine($"Application error when creating a reservation: {ex.Message}"); 
+                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error creating reservation: {ex.Message}"); 
+                return Problem(detail: "An internal server error occurred.", statusCode: StatusCodes.Status500InternalServerError);
+            }
         }
+
 
         /// <summary>
         /// Gets a booking by its ID.
@@ -86,11 +123,12 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         /// </summary>
         /// <param name="touristId">The tourist's ID (Guid).</param>
         /// <response code="200">Returns the list of bookings for the tourist.</response>
+        /// <response code="404">If no bookings are found for the specified tourist.</response>
         [HttpGet("tourist/{touristId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBookingsByTourist(Guid touristId)
         {
-            var query = new GetBookingsByTouristIdQuery(touristId); // Asegúrate que este query también use Guid
+            var query = new GetBookingsByTouristIdQuery(touristId); 
             var bookings = await _bookingQueryService.Handle(query);
             var resources = bookings.Select(BookingAssembler.ToResourceFromEntity);
             return Ok(resources);
@@ -113,6 +151,20 @@ namespace workstation_back_end.Bookings.Interfaces.REST
                 return NotFound($"Booking with ID {bookingId} not found.");
 
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Gets all bookings.
+        /// </summary>
+        /// <response code="200">Returns the list of all bookings.</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllBookings()
+        {
+            var query = new GetAllBookingsQuery();
+            var bookings = await _bookingQueryService.Handle(query);
+            var resources = bookings.Select(BookingAssembler.ToResourceFromEntity);
+            return Ok(resources);
         }
     }
 }

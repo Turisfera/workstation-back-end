@@ -5,33 +5,36 @@ namespace workstation_back_end.Experience.Domain.Models.Validators;
 
 public class CreateExperienceCommandValidator  : AbstractValidator<CreateExperienceCommand>
 {
+    
+    private const int MaxTitleLength = 100;
+    private const int MaxDescriptionLength = 500;
+    private const int MaxLocationLength = 60;
+    private const int MaxFrequenciesLength = 100;
+    private const int MinImagesCount = 1;
+    private const int MaxImagesCount = 3;
     public CreateExperienceCommandValidator()
     {
-         RuleFor(e => e.Title)
+        RuleFor(e => e.Title)
             .NotEmpty().WithMessage("Title is required.")
-            .MaximumLength(100).WithMessage("Title must be 100 characters or fewer.");
+            .MaximumLength(MaxTitleLength).WithMessage($"Title must be {MaxTitleLength} characters or fewer.");
 
         RuleFor(e => e.Description)
             .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(500).WithMessage("Description must be 500 characters or fewer.");
+            .MaximumLength(MaxDescriptionLength).WithMessage($"Description must be {MaxDescriptionLength} characters or fewer.");
 
         RuleFor(e => e.Location)
             .NotEmpty().WithMessage("Location is required.")
-            .MaximumLength(60).WithMessage("Location must be 60 characters or fewer.");
+            .MaximumLength(MaxLocationLength).WithMessage($"Location must be {MaxLocationLength} characters or fewer.");
 
         RuleFor(e => e.Frequencies)
             .NotEmpty().WithMessage("At least one frequency is required.")
-            .MaximumLength(100).WithMessage("Frequencies must be 100 characters or fewer.");
+            .MaximumLength(MaxFrequenciesLength).WithMessage($"Frequencies must be {MaxFrequenciesLength} characters or fewer.");
 
         RuleFor(e => e.Duration)
             .GreaterThan(0).WithMessage("Duration must be greater than 0.");
 
         RuleFor(e => e.Price)
             .GreaterThanOrEqualTo(0).WithMessage("Price must be non-negative.");
-
-        RuleFor(e => e.Rating)
-            .InclusiveBetween(1.0m, 5.0m) 
-            .WithMessage("Rating must be between 1 and 5.");
 
         RuleFor(e => e.CategoryId)
             .NotEmpty().WithMessage("Category is required.");
@@ -48,8 +51,8 @@ public class CreateExperienceCommandValidator  : AbstractValidator<CreateExperie
 
         RuleFor(e => e.ExperienceImages)
             .NotNull().WithMessage("At least one image is required.")
-            .Must(images => images.Count >= 1 && images.Count <= 3)
-            .WithMessage("You must provide between 1 and 3 images.");
+            .Must(images => images.Count >= MinImagesCount && images.Count <= MaxImagesCount)
+            .WithMessage($"You must provide between {MinImagesCount} and {MaxImagesCount} images.");
 
         RuleForEach(e => e.ExperienceImages)
             .ChildRules(img =>

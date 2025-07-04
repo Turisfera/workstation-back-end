@@ -6,7 +6,7 @@ namespace workstation_back_end.Experience.Domain.Models.Entities {
     {
         
         public Experience(string title, string description, string location, int duration,
-            decimal price, string frequencies, decimal rating, int categoryId)
+            decimal price, string frequencies, int categoryId, Guid agencyUserId)
         {
             Title = title;
             Description = description;
@@ -14,8 +14,8 @@ namespace workstation_back_end.Experience.Domain.Models.Entities {
             Duration = duration;
             Price = price;
             Frequencies = frequencies;
-            Rating = rating;
             CategoryId = categoryId;
+            AgencyUserId = agencyUserId;
             IsActive = true;
             CreatedDate = DateTime.UtcNow;
 
@@ -29,11 +29,14 @@ namespace workstation_back_end.Experience.Domain.Models.Entities {
         public int Duration { get; set; }
         public decimal Price { get; set; }
         public string Frequencies { get; set; }
-        public decimal Rating { get; set; }
+        
+        public int Id { get; set; }
         
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         
+        public Guid AgencyUserId { get; set; } 
+        public Users.Domain.Models.Entities.Agencia Agencia { get; set; } 
         public List<Schedule> Schedules { get; } = new();
         public List<ExperienceImage> ExperienceImages { get; } = new();
         public List<Include> Includes { get; } = new();

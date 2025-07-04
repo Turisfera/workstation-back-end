@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using workstation_back_end.Bookings.Domain;
 using workstation_back_end.Users.Domain.Models.Commands;
 using workstation_back_end.Users.Domain.Models.Entities;
 using workstation_back_end.Users.Domain.Models.Queries;
@@ -14,11 +15,13 @@ public class AgenciaController : ControllerBase
 {
     private readonly IUserQueryService _queryService;
     private readonly IUserCommandService _commandService;
+    private readonly IBookingRepository _bookingRepository;
 
-    public AgenciaController(IUserQueryService queryService, IUserCommandService commandService)
+    public AgenciaController(IUserQueryService queryService, IUserCommandService commandService, IBookingRepository bookingRepository)
     {
         _queryService = queryService;
         _commandService = commandService;
+        _bookingRepository = bookingRepository;
     }
 
     /// <summary>
@@ -29,8 +32,16 @@ public class AgenciaController : ControllerBase
     {
         var usuario = await _queryService.Handle(new GetUsuarioByIdQuery(userId));
         if (usuario?.Agencia == null) return NotFound();
+        
+        var bookings = await _bookingRepository.ListAllWithExperienceAsync();
+        var reservationCount = bookings.Count(b =>
+            b.Experience.Agencia != null &&
+            b.Experience.Agencia.UserId == userId &&
+            b.Status == "Confirmada");
 
         var resource = AgenciaResourceAssembler.ToResource(usuario.Agencia);
+        resource.ReservationCount = reservationCount;
+
         return Ok(resource);
     }
 

@@ -57,9 +57,9 @@ public class ExperienceController : ControllerBase
     ///        "location": "Lima",
     ///        "duration": 2,
     ///        "price": 35.00,
-    ///        "frequencies": "Monday, Wednesday, Friday",
-    ///        "rating": 4.5,
+    ///        "frequencies": "weekdays",
     ///        "categoryId": 1,
+    ///        "agencyUserId": "a1b2c3d4-e5f6-7890-1234-567890abcdef", 
     ///        "experienceImages": [{ "url": "https://example.com/img.jpg" }],
     ///        "includes": [{ "description": "Bike rental" }],
     ///        "schedules": [{ "time": "09:00" }]
@@ -175,5 +175,44 @@ public class ExperienceController : ControllerBase
         var experiences = await _experienceQueryService.Handle(query);
         var resources = experiences.Select(ExperienceResourceFromEntityAssembler.ToResourceFromEntity);
         return resources.Any() ? Ok(resources) : NotFound($"No experiences found for category {categoryId}.");
+    }
+    
+    
+    /// <summary>
+    /// Gets an experience by its ID.
+    /// </summary>
+    /// <param name="id">Experience ID</param>
+    /// <response code="200">Returns the experience</response>
+    /// <response code="404">Experience not found</response>
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExperienceById(int id)
+    {
+        var query = new GetExperienceByIdQuery(id);
+        var experience = await _experienceQueryService.Handle(query);
+        
+        if (experience == null)
+            return NotFound($"Experience with ID {id} not found.");
+
+        var resource = ExperienceResourceFromEntityAssembler.ToResourceFromEntity(experience);
+        return Ok(resource);
+    }
+    
+    /// <summary>
+    /// Gets all experiences associated with a specific agency.
+    /// </summary>
+    /// <param name="agencyUserId">The User ID (GUID) of the agency</param>
+    /// <response code="200">Returns the list of experiences for the agency</response>
+    /// <response code="404">If no experiences are found for the specified agency or the agency does not exist</response>
+    [HttpGet("agency/{agencyUserId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetByAgency(Guid agencyUserId)
+    {
+        var query = new GetExperiencesByAgencyQuery(agencyUserId); 
+        var experiences = await _experienceQueryService.Handle(query);
+        var resources = experiences.Select(ExperienceResourceFromEntityAssembler.ToResourceFromEntity);
+        return resources.Any() ? Ok(resources) : NotFound($"No experiences found for agency with User ID {agencyUserId} or agency does not exist.");
     }
 }

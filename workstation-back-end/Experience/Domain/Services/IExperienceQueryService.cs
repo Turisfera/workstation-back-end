@@ -6,5 +6,7 @@ public interface IExperienceQueryService
 {
     Task<IEnumerable<Models.Entities.Experience>> Handle(GetAllExperiencesQuery query);
     Task<IEnumerable<Models.Entities.Experience>> Handle(GetExperiencesByCategoryQuery query);
+    Task<Models.Entities.Experience?> Handle(GetExperienceByIdQuery query);
+    Task<IEnumerable<Models.Entities.Experience>> Handle(GetExperiencesByAgencyQuery query);
     
 }

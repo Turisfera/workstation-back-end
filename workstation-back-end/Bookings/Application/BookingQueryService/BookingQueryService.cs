@@ -16,12 +16,17 @@ public class BookingQueryService : IBookingQueryService
 
     public async Task<Booking?> Handle(GetBookingByIdQuery query)
     {
-        return await _bookingRepository.FindByIdAsync(query.BookingId);
+        return await _bookingRepository.FindByIdWithExperienceAsync(query.BookingId);
     }
 
     public async Task<IEnumerable<Booking>> Handle(GetBookingsByTouristIdQuery query)
     {
         return await _bookingRepository.FindByTouristIdAsync(query.TouristId);
+    }
+    
+    public async Task<IEnumerable<Booking>> Handle(GetAllBookingsQuery query)
+    {
+        return await _bookingRepository.ListAllWithExperienceAsync();
     }
     
 }

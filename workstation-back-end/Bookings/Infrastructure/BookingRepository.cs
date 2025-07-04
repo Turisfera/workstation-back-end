@@ -29,4 +29,30 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
             .Where(b => b.Experience.CategoryId == agencyId) 
             .ToListAsync();
     }
+    
+    public async Task<Booking?> FindByIdWithExperienceAsync(int bookingId)
+    {
+        return await _context.Bookings
+            .Include(b => b.Experience)
+            .FirstOrDefaultAsync(b => b.Id == bookingId);
+    }
+
+    public async Task<IEnumerable<Booking>> ListAllWithExperienceAsync()
+    {
+        return await _context.Bookings
+            .Include(b => b.Experience) 
+            .ToListAsync();
+    }
+    
+    public async Task<bool> HasCompletedBookingForAgencyViaExperienceAsync(Guid touristUserId, Guid agencyUserId)
+    {
+        return await _context.Bookings
+            .Include(b => b.Experience) 
+            .ThenInclude(e => e.Agencia) 
+            .AnyAsync(
+                b => b.TouristId == touristUserId && 
+                     b.Experience.Agencia.UserId == agencyUserId && 
+                     b.Status == "Confirmada" 
+            );
+    }
 }

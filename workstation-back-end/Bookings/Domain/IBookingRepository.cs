@@ -22,4 +22,9 @@ public interface IBookingRepository : IBaseRepository<Booking>
      * <returns>Una colección de reservas para la agencia.</returns>
      */
     Task<IEnumerable<Booking>> FindByAgencyIdAsync(int agencyId);
+    
+    Task<Booking?> FindByIdWithExperienceAsync(int bookingId);
+    Task<IEnumerable<Booking>> ListAllWithExperienceAsync();
+    
+    Task<bool> HasCompletedBookingForAgencyViaExperienceAsync(Guid touristUserId, Guid agencyUserId);
 }

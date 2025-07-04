@@ -5,6 +5,7 @@ namespace workstation_back_end.Inquiry.Domain.Models.Entities;
 
 public class Inquiry : BaseEntity
 {
+    public int Id { get; set; }
     public int ExperienceId { get; set; }
     public Experience.Domain.Models.Entities.Experience Experience { get; set; }
 
