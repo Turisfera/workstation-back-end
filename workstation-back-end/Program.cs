@@ -115,6 +115,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(); 
 
+// === CORS ===
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (connectionString == null)
@@ -184,6 +198,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.UseAuthentication(); 
+app.UseCors("_myAllowSpecificOrigins");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
