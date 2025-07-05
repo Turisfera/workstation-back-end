@@ -29,6 +29,7 @@ public class BookingCommandService : IBookingCommandService
         var experience = await _experienceQueryService.Handle(new GetExperienceByIdQuery(command.ExperienceId));
         if (experience == null) 
         {
+
             throw new ArgumentException("Experience not found for the given ID."); 
         }
         
@@ -41,12 +42,12 @@ public class BookingCommandService : IBookingCommandService
         var totalPrice = experience.Price * command.NumberOfPeople;
 
         var booking = new Booking(
-            command.TouristId,
+            command.TouristId, // 
             command.ExperienceId,
             command.BookingDate.Date,
             command.NumberOfPeople,
             totalPrice,
-            "Confirmada",
+            "Confirmada", 
             command.time
         );
 
@@ -59,7 +60,9 @@ public class BookingCommandService : IBookingCommandService
         catch (Exception e)
         {
             Console.WriteLine($"Error al crear reserva en repositorio: {e.Message}");
-            throw new ApplicationException("Could not create the booking due to a database error.", e); 
+
+            throw; 
+         
         }
     }
 

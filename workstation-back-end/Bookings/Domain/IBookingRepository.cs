@@ -21,7 +21,7 @@ public interface IBookingRepository : IBaseRepository<Booking>
      * <param name="agencyId">El ID del usuario agencia.</param>
      * <returns>Una colección de reservas para la agencia.</returns>
      */
-    Task<IEnumerable<Booking>> FindByAgencyIdAsync(int agencyId);
+    Task<IEnumerable<Booking>> FindByAgencyIdAsync(Guid agencyId);
     
     Task<Booking?> FindByIdWithExperienceAsync(int bookingId);
     Task<IEnumerable<Booking>> ListAllWithExperienceAsync();

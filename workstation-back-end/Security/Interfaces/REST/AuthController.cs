@@ -78,7 +78,8 @@ public class AuthController : ControllerBase
         {
             Token = result.Token,
             Email = result.Email,
-            Rol = result.Rol
+            Rol = result.Rol,
+            Id = result.Id.ToString()
         });
     }
 }

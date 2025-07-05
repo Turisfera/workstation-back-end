@@ -5,6 +5,7 @@ using workstation_back_end.Experience.Domain.Services;
 using workstation_back_end.Experience.Interfaces.REST.Resources;
 using workstation_back_end.Experience.Interfaces.REST.Transform;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace workstation_back_end.Experience.Interfaces.REST;
 
@@ -15,6 +16,7 @@ namespace workstation_back_end.Experience.Interfaces.REST;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces("application/json")]
+[Authorize] 
 public class ExperienceController : ControllerBase
 {
     private readonly IExperienceQueryService _experienceQueryService;
@@ -34,6 +36,7 @@ public class ExperienceController : ControllerBase
     /// <response code="200">Returns the list of experiences</response>
     /// <response code="404">If no experiences are found</response>
     [HttpGet]
+    [AllowAnonymous] 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAll()
@@ -206,6 +209,7 @@ public class ExperienceController : ControllerBase
     /// <response code="200">Returns the list of experiences for the agency</response>
     /// <response code="404">If no experiences are found for the specified agency or the agency does not exist</response>
     [HttpGet("agency/{agencyUserId:guid}")]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByAgency(Guid agencyUserId)

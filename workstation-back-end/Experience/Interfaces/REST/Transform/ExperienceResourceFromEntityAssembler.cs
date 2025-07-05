@@ -1,5 +1,7 @@
 ﻿using workstation_back_end.Experience.Domain.Models.Entities;
 using workstation_back_end.Experience.Interfaces.REST.Resources;
+using workstation_back_end.Users.Interfaces.REST.Resources;
+using workstation_back_end.Users.Interfaces.REST.Transform;
 
 namespace workstation_back_end.Experience.Interfaces.REST.Transform;
 
@@ -25,9 +27,33 @@ public static class ExperienceResourceFromEntityAssembler
             schedule.Add(new ScheduleResource(experienceSchedule.Time));
         } 
         
+        CategoryResource categoryResource = null;
+        if (experience.Category != null)
+        {
+            categoryResource = CategoryResourceFromEntityAssembler.ToResourceFromEntity(experience.Category); 
+        }
+
+        AgenciaResource agencyResource = null;
+        if (experience.Agencia != null)
+        {
+            agencyResource = AgenciaResourceAssembler.ToResource(experience.Agencia); 
+        }
         
-        return new ExperienceResource(experience.Id ,experience.Title, experience.Description, experience.Location, experience.Duration,experience.Price,
-            experience.Frequencies, experience.CategoryId, images, includes, schedule);
+        return new ExperienceResource(
+            experience.Id,
+            experience.Title,
+            experience.Description,
+            experience.Location,
+            experience.Duration,
+            experience.Price,
+            experience.Frequencies,
+            experience.CategoryId,
+            images,
+            includes,
+            schedule, 
+            categoryResource, 
+            agencyResource   
+        );
     }
     
 }

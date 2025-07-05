@@ -25,14 +25,14 @@ public class AuthService : IAuthService
 
     public async Task<Usuario> SignUpAsync(SignUpCommand command)
     {
-        // Verificar duplicado por email
+
         var existingUser = await _usuarioRepository.FindByEmailAsync(command.Email);
         if (existingUser != null)
             throw new InvalidOperationException("Este correo electrónico ya está registrado.");
 
         var hasher = new PasswordHasher<Usuario>();
 
-        // Crear usuario base
+
         var user = new Usuario
         {
             UserId = Guid.NewGuid(),
@@ -110,7 +110,8 @@ public class AuthService : IAuthService
         {
             Token = token,
             Email = user.Email,
-            Rol = rol
+            Rol = rol,
+            Id = user.UserId
         };
     }
 }

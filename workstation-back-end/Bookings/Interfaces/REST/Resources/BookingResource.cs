@@ -1,3 +1,5 @@
+using workstation_back_end.Experience.Interfaces.REST.Resources;
+
 namespace workstation_back_end.Bookings.Interfaces.REST.Resources;
 
 /**
@@ -20,5 +22,7 @@ public record BookingResource(
     decimal Price,
     string Status,
     int ExperienceId,
-    string ExperienceTitle,
-    Guid TouristId, string Time);
+    Guid TouristId,
+    string Time,
+    ExperienceResource Experience 
+);

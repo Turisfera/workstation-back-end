@@ -1,5 +1,7 @@
 using workstation_back_end.Bookings.Domain.Models.Entities;
 using workstation_back_end.Bookings.Interfaces.REST.Resources;
+using workstation_back_end.Experience.Interfaces.REST.Resources;
+using workstation_back_end.Experience.Interfaces.REST.Transform;
 
 namespace workstation_back_end.Bookings.Interfaces.REST.Transform;
 
@@ -13,7 +15,11 @@ public static class BookingAssembler
     public static BookingResource ToResourceFromEntity(Booking entity)
     {
 
-        var experienceTitle = entity.Experience?.Title ?? "Título no disponible";
+        ExperienceResource experienceResource = null;
+        if (entity.Experience != null)
+        {
+            experienceResource = ExperienceResourceFromEntityAssembler.ToResourceFromEntity(entity.Experience); 
+        }
 
         return new BookingResource(
             entity.Id,
@@ -22,8 +28,9 @@ public static class BookingAssembler
             entity.Price,
             entity.Status,
             entity.ExperienceId,
-            experienceTitle,
-            entity.TouristId, entity.Time
+            entity.TouristId,
+            entity.Time,
+            experienceResource 
         );
     }
 }
