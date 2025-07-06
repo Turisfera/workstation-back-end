@@ -16,7 +16,7 @@ public record ExperienceResource (
     List<IncludeResource> Includes, 
     List<ScheduleResource> Schedule,
     CategoryResource Category,
-    AgenciaResource Agencia)
+    AgencyResource Agency)
 {
     
 }

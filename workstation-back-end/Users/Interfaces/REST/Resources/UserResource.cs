@@ -1,7 +1,7 @@
 namespace workstation_back_end.Users.Interfaces.REST.Resources;
 
 
-public class UsuarioResource
+public class UserResource
 {
     public Guid UserId { get; set; }
     public string FirstName { get; set; }  // Renombrado desde Nombres
@@ -9,6 +9,6 @@ public class UsuarioResource
     public string Number { get; set; }
     public string Email { get; set; }
 
-    public bool EsAgencia { get; set; }
-    public bool EsTurista { get; set; }
+    public bool EsAgency { get; set; }
+    public bool EsTourist { get; set; }
 }

@@ -2,17 +2,17 @@ namespace workstation_back_end.Users.Domain.Models.Commands;
 
 
 
-public record CreateUsuarioCommand(
+public record CreateUserCommand(
     string FirstName,
     string LastName,
     string Number,
     string Email,
     string Password,
 
-    // Rol puede ser "agencia" o "turista"
+    // Rol puede ser "agency" o "tourist"
     string Rol,
 
-    // Datos opcionales para Agencia
+    // Datos opcionales para Agency
     string? AgencyName,
     string? Ruc,
     string? Description,
@@ -22,6 +22,6 @@ public record CreateUsuarioCommand(
     string? SocialLinkInstagram,
     string? SocialLinkWhatsapp,
 
-    // Datos opcionales para Turista
+    // Datos opcionales para Tourist
     string? AvatarUrl
 );

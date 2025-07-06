@@ -10,7 +10,7 @@ public class Response : BaseEntity
     public Inquiry Inquiry { get; set; }
 
     public Guid ResponderId { get; set; }               
-    public Usuario Responder { get; set; }            
+    public User Responder { get; set; }            
 
     public string Answer { get; set; } = string.Empty;
     public DateTime AnsweredAt { get; set; }

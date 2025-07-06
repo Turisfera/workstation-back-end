@@ -7,8 +7,8 @@ public static class ReviewAssembler
 {
     public static ReviewResource ToResourceFromEntity(Review entity)
     {
-        var touristName = entity.TouristUser != null ? $"{entity.TouristUser.FirstName} {entity.TouristUser.LastName}" : "Usuario Anónimo"; 
-        var touristAvatarUrl = entity.TouristUser?.Turista?.AvatarUrl; 
+        var touristName = entity.TouristUser != null ? $"{entity.TouristUser.FirstName} {entity.TouristUser.LastName}" : "User Anónimo"; 
+        var touristAvatarUrl = entity.TouristUser?.Tourist?.AvatarUrl; 
 
         return new ReviewResource(
             entity.Id,

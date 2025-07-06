@@ -1,9 +1,9 @@
 namespace workstation_back_end.Users.Domain.Models.Queries;
 
 
-public record GetUsuarioByIdQuery
+public record GetUserByIdQuery
 {
-    public GetUsuarioByIdQuery(Guid userId)
+    public GetUserByIdQuery(Guid userId)
     {
         UserId = userId;
     }

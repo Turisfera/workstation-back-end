@@ -12,23 +12,23 @@ namespace workstation_back_end.Users.Application.CommandServices;
 
 public class UserCommandService : IUserCommandService
 {
-    private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<CreateUsuarioCommand> _validator;
+    private readonly IValidator<CreateUserCommand> _validator;
 
     public UserCommandService(
-        IUsuarioRepository usuarioRepository,
+        IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IValidator<CreateUsuarioCommand> validator)
+        IValidator<CreateUserCommand> validator)
     {
-        _usuarioRepository = usuarioRepository ?? throw new ArgumentNullException(nameof(usuarioRepository));
+        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     }
 
-    public async Task<Usuario> Handle(CreateUsuarioCommand command)
+    public async Task<User> Handle(CreateUserCommand command)
     {
-        var user = new Usuario
+        var user = new User
         {
             UserId = Guid.NewGuid(),
             FirstName = command.FirstName,
@@ -40,11 +40,11 @@ public class UserCommandService : IUserCommandService
             CreatedDate = DateTime.UtcNow
         };
 
-        await _usuarioRepository.AddAsync(user);
+        await _userRepository.AddAsync(user);
 
-        if (command.Rol == "agencia")
+        if (command.Rol == "agency")
         {
-            var agencia = new Agencia
+            var agency = new Agency
             {
                 UserId = user.UserId,
                 AgencyName = command.AgencyName ?? "",
@@ -54,11 +54,11 @@ public class UserCommandService : IUserCommandService
                 IsActive = true
             };
 
-            await _usuarioRepository.AddAgenciaAsync(agencia);
+            await _userRepository.AddAgencyAsync(agency);
         }
-        else if (command.Rol == "turista")
+        else if (command.Rol == "tourist")
         {
-            var turista = new Turista
+            var tourist = new Tourist
             {
                 UserId = user.UserId,
                 AvatarUrl = command.AvatarUrl ?? "",
@@ -66,63 +66,63 @@ public class UserCommandService : IUserCommandService
                 IsActive = true
             };
 
-            await _usuarioRepository.AddTuristaAsync(turista);
+            await _userRepository.AddTouristAsync(tourist);
         }
 
         await _unitOfWork.CompleteAsync();
         return user;
     }
     
-    public async Task UpdateAgenciaAsync(Guid userId, UpdateAgenciaCommand command)
+    public async Task UpdateAgencyAsync(Guid userId, UpdateAgencyCommand command)
     {
-        var usuario = await _usuarioRepository.FindByGuidAsync(userId);
+        var user = await _userRepository.FindByGuidAsync(userId);
 
-        if (usuario == null || usuario.Agencia == null)
-            throw new Exception("No se encontró el usuario o la agencia.");
+        if (user == null || user.Agency == null)
+            throw new Exception("No se encontró el user o la agency.");
 
-        usuario.Agencia.AgencyName = command.AgencyName;
-        usuario.Agencia.Ruc = command.Ruc;
-        usuario.Agencia.Description = command.Description;
+        user.Agency.AgencyName = command.AgencyName;
+        user.Agency.Ruc = command.Ruc;
+        user.Agency.Description = command.Description;
         // Validar campos tipo valor (nullable)
         if (command.Rating.HasValue)
-            usuario.Agencia.Rating = command.Rating.Value;
+            user.Agency.Rating = command.Rating.Value;
 
         if (command.ReviewCount.HasValue)
-            usuario.Agencia.ReviewCount = command.ReviewCount.Value;
+            user.Agency.ReviewCount = command.ReviewCount.Value;
 
         if (command.ReservationCount.HasValue)
-            usuario.Agencia.ReservationCount = command.ReservationCount.Value;
-        usuario.Agencia.AvatarUrl = command.AvatarUrl;
-        usuario.Agencia.ContactEmail = command.ContactEmail;
-        usuario.Agencia.ContactPhone = command.ContactPhone;
-        usuario.Agencia.SocialLinkFacebook = command.SocialLinkFacebook;
-        usuario.Agencia.SocialLinkInstagram = command.SocialLinkInstagram;
-        usuario.Agencia.SocialLinkWhatsapp = command.SocialLinkWhatsapp;
+            user.Agency.ReservationCount = command.ReservationCount.Value;
+        user.Agency.AvatarUrl = command.AvatarUrl;
+        user.Agency.ContactEmail = command.ContactEmail;
+        user.Agency.ContactPhone = command.ContactPhone;
+        user.Agency.SocialLinkFacebook = command.SocialLinkFacebook;
+        user.Agency.SocialLinkInstagram = command.SocialLinkInstagram;
+        user.Agency.SocialLinkWhatsapp = command.SocialLinkWhatsapp;
 
-        _usuarioRepository.UpdateAgencia(usuario.Agencia);
+        _userRepository.UpdateAgency(user.Agency);
         await _unitOfWork.CompleteAsync();
     }
 
-    public async Task UpdateTuristaAsync(Guid userId, UpdateTuristaCommand command)
+    public async Task UpdateTouristAsync(Guid userId, UpdateTouristCommand command)
     {
-        var usuario = await _usuarioRepository.FindByGuidAsync(userId);
+        var user = await _userRepository.FindByGuidAsync(userId);
 
-        if (usuario == null || usuario.Turista == null)
-            throw new Exception("No se encontró el usuario o el turista.");
+        if (user == null || user.Tourist == null)
+            throw new Exception("No se encontró el user o el tourist.");
 
-        usuario.Turista.AvatarUrl = command.AvatarUrl;
+        user.Tourist.AvatarUrl = command.AvatarUrl;
 
-        _usuarioRepository.UpdateTurista(usuario.Turista);
+        _userRepository.UpdateTourist(user.Tourist);
         await _unitOfWork.CompleteAsync();
     }
     
-    public async Task DeleteUsuarioAsync(Guid userId)
+    public async Task DeleteUserAsync(Guid userId)
     {
-        var usuario = await _usuarioRepository.FindByGuidAsync(userId);
-        if (usuario == null)
-            throw new Exception("Usuario no encontrado");
+        var user = await _userRepository.FindByGuidAsync(userId);
+        if (user == null)
+            throw new Exception("User no encontrado");
 
-        _usuarioRepository.Remove(usuario);
+        _userRepository.Remove(user);
         await _unitOfWork.CompleteAsync();
     }
 }

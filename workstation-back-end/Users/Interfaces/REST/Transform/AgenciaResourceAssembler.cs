@@ -4,25 +4,25 @@ using workstation_back_end.Users.Interfaces.REST.Resources;
 namespace workstation_back_end.Users.Interfaces.REST.Transform;
 
 
-public static class AgenciaResourceAssembler
+public static class AgencyResourceAssembler
 {
-    public static AgenciaResource ToResource(Agencia agencia)
+    public static AgencyResource ToResource(Agency agency)
     {
-        return new AgenciaResource
+        return new AgencyResource
         {
-            UserId = agencia.UserId,
-            AgencyName = agencia.AgencyName,
-            Ruc = agencia.Ruc,
-            Description = agencia.Description,
-            Rating = agencia.Rating,
-            ReviewCount = agencia.ReviewCount,
-            ReservationCount = agencia.ReservationCount,
-            AvatarUrl = agencia.AvatarUrl,
-            ContactEmail = agencia.ContactEmail,
-            ContactPhone = agencia.ContactPhone,
-            SocialLinkFacebook = agencia.SocialLinkFacebook,
-            SocialLinkInstagram = agencia.SocialLinkInstagram,
-            SocialLinkWhatsapp = agencia.SocialLinkWhatsapp
+            UserId = agency.UserId,
+            AgencyName = agency.AgencyName,
+            Ruc = agency.Ruc,
+            Description = agency.Description,
+            Rating = agency.Rating,
+            ReviewCount = agency.ReviewCount,
+            ReservationCount = agency.ReservationCount,
+            AvatarUrl = agency.AvatarUrl,
+            ContactEmail = agency.ContactEmail,
+            ContactPhone = agency.ContactPhone,
+            SocialLinkFacebook = agency.SocialLinkFacebook,
+            SocialLinkInstagram = agency.SocialLinkInstagram,
+            SocialLinkWhatsapp = agency.SocialLinkWhatsapp
         };
     }
 }

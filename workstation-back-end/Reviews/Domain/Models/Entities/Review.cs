@@ -12,8 +12,8 @@ public class Review : BaseEntity
     public string Comment { get; set; } = string.Empty;
     public DateTime ReviewDate { get; set; } 
     
-    public Usuario TouristUser { get; set; } = null!; 
-    public Agencia Agency { get; set; } = null!; 
+    public User TouristUser { get; set; } = null!; 
+    public Agency Agency { get; set; } = null!; 
 
     public Review() { }
 

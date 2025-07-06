@@ -4,19 +4,19 @@ using workstation_back_end.Users.Interfaces.REST.Resources;
 namespace workstation_back_end.Users.Interfaces.REST.Transform;
 
 
-public static class UsuarioResourceFromEntityAssembler
+public static class UserResourceFromEntityAssembler
 {
-    public static UsuarioResource ToResource(Usuario usuario)
+    public static UserResource ToResource(User user)
     {
-        return new UsuarioResource
+        return new UserResource
         {
-            UserId = usuario.UserId,
-            FirstName = usuario.FirstName,
-            LastName = usuario.LastName,
-            Number = usuario.Number,
-            Email = usuario.Email,
-            EsAgencia = usuario.Agencia != null,
-            EsTurista = usuario.Turista != null
+            UserId = user.UserId,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Number = user.Number,
+            Email = user.Email,
+            EsAgency = user.Agency != null,
+            EsTourist = user.Tourist != null
         };
     }
 }

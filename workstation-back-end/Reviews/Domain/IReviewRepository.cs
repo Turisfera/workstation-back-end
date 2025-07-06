@@ -7,10 +7,10 @@ public interface IReviewRepository : IBaseRepository<Review>
 {
     /**
      * <summary>
-     * Encuentra todas las reseñas escritas sobre una agencia específica.
+     * Encuentra todas las reseñas escritas sobre una agency específica.
      * </summary>
-     * <param name="agencyId">El ID de la agencia.</param>
-     * <returns>Una colección de reseñas para la agencia.</returns>
+     * <param name="agencyId">El ID de la agency.</param>
+     * <returns>Una colección de reseñas para la agency.</returns>
      */
     Task<IEnumerable<Review>> FindByAgencyUserIdAsync(Guid agencyUserId);
 

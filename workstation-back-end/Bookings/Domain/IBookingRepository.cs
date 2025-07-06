@@ -7,19 +7,19 @@ public interface IBookingRepository : IBaseRepository<Booking>
 {
     /**
      * <summary>
-     * Encuentra todas las reservas realizadas por un turista específico.
+     * Encuentra todas las reservas realizadas por un tourist específico.
      * </summary>
-     * <param name="touristId">El ID del usuario turista.</param>
-     * <returns>Una colección de reservas del turista.</returns>
+     * <param name="touristId">El ID del user tourist.</param>
+     * <returns>Una colección de reservas del tourist.</returns>
      */
     Task<IEnumerable<Booking>> FindByTouristIdAsync(Guid  touristId);
 
     /**
      * <summary>
-     * Encuentra todas las reservas asociadas a las experiencias de una agencia específica.
+     * Encuentra todas las reservas asociadas a las experiencias de una agency específica.
      * </summary>
-     * <param name="agencyId">El ID del usuario agencia.</param>
-     * <returns>Una colección de reservas para la agencia.</returns>
+     * <param name="agencyId">El ID del user agency.</param>
+     * <returns>Una colección de reservas para la agency.</returns>
      */
     Task<IEnumerable<Booking>> FindByAgencyIdAsync(Guid agencyId);
     

@@ -33,10 +33,10 @@ public static class ExperienceResourceFromEntityAssembler
             categoryResource = CategoryResourceFromEntityAssembler.ToResourceFromEntity(experience.Category); 
         }
 
-        AgenciaResource agencyResource = null;
-        if (experience.Agencia != null)
+        AgencyResource agencyResource = null;
+        if (experience.Agency != null)
         {
-            agencyResource = AgenciaResourceAssembler.ToResource(experience.Agencia); 
+            agencyResource = AgencyResourceAssembler.ToResource(experience.Agency); 
         }
         
         return new ExperienceResource(

@@ -20,7 +20,7 @@ public class ReviewRepository : BaseRepository<Review>, IReviewRepository
         return await _context.Reviews
             .Where(r => r.AgencyUserId == agencyUserId)
             .Include(r => r.TouristUser)
-            .ThenInclude(u => u.Turista) 
+            .ThenInclude(u => u.Tourist) 
             .ToListAsync();
     }
 
@@ -42,7 +42,7 @@ public class ReviewRepository : BaseRepository<Review>, IReviewRepository
         return await _context.Reviews
             .Where(r => r.Id == id)
             .Include(r => r.TouristUser)   
-            .ThenInclude(u => u.Turista)   
+            .ThenInclude(u => u.Tourist)   
             .FirstOrDefaultAsync();     
     }
 }
