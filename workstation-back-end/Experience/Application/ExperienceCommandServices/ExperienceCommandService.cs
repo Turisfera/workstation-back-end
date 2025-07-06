@@ -38,8 +38,8 @@ public class ExperienceCommandService(
             throw new ArgumentException($"Category with ID {command.CategoryId} does not exist.");
 
 
-        var usuario = await _userQueryService.Handle(new GetUsuarioByIdQuery(command.AgencyUserId)); 
-        if (usuario?.Agencia == null) 
+        var user = await _userQueryService.Handle(new GetUserByIdQuery(command.AgencyUserId)); 
+        if (user?.Agency == null) 
             throw new ArgumentException($"Agency with User ID {command.AgencyUserId} does not exist or is not an agency.");
         
         var experience = new Domain.Models.Entities.Experience(

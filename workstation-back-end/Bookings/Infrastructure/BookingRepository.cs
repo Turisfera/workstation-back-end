@@ -26,7 +26,7 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
             .Include(b => b.Experience)
                 .ThenInclude(e => e.Category) // ¡Ahora sí, la categoría!
             .Include(b => b.Experience)
-                .ThenInclude(e => e.Agencia) // ¡Y la agencia!
+                .ThenInclude(e => e.Agency) // ¡Y la agency!
             .ToListAsync();
     }
 
@@ -40,7 +40,7 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
             .Include(b => b.Experience)
                 .ThenInclude(e => e.Category)
             .Include(b => b.Experience)
-                .ThenInclude(e => e.Agencia)
+                .ThenInclude(e => e.Agency)
             .FirstOrDefaultAsync(b => b.Id == bookingId);
     }
 
@@ -54,7 +54,7 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
             .Include(b => b.Experience)
                 .ThenInclude(e => e.Category)
             .Include(b => b.Experience)
-                .ThenInclude(e => e.Agencia)
+                .ThenInclude(e => e.Agency)
             .ToListAsync();
     }
     
@@ -68,8 +68,8 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
             .Include(b => b.Experience)
                 .ThenInclude(e => e.Category)
             .Include(b => b.Experience)
-                .ThenInclude(e => e.Agencia)
-            .Where(b => b.Experience.Agencia.UserId == agencyId) 
+                .ThenInclude(e => e.Agency)
+            .Where(b => b.Experience.Agency.UserId == agencyId) 
             .ToListAsync();
     }
 
@@ -77,10 +77,10 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
     {
         return await _context.Bookings
             .Include(b => b.Experience)
-            .ThenInclude(e => e.Agencia)
+            .ThenInclude(e => e.Agency)
             .AnyAsync(
                 b => b.TouristId == touristUserId &&
-                     b.Experience.Agencia.UserId == agencyUserId &&
+                     b.Experience.Agency.UserId == agencyUserId &&
                      b.Status == "Confirmada"
             );
     }

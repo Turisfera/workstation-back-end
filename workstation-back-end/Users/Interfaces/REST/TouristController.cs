@@ -9,13 +9,13 @@ using workstation_back_end.Users.Interfaces.REST.Transform;
 namespace workstation_back_end.Users.Interfaces.REST;
 
 [ApiController]
-[Route("api/v1/turistas")]
-public class TuristaController : ControllerBase
+[Route("api/v1/tourists")]
+public class TouristController : ControllerBase
 {
     private readonly IUserQueryService _queryService;
     private readonly IUserCommandService _commandService;
 
-    public TuristaController(IUserQueryService queryService, IUserCommandService commandService)
+    public TouristController(IUserQueryService queryService, IUserCommandService commandService)
     {
         _queryService = queryService;
         _commandService = commandService;
@@ -27,10 +27,10 @@ public class TuristaController : ControllerBase
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetById(Guid userId)
     {
-        var usuario = await _queryService.Handle(new GetUsuarioByIdQuery(userId));
-        if (usuario?.Turista == null) return NotFound();
+        var user = await _queryService.Handle(new GetUserByIdQuery(userId));
+        if (user?.Tourist == null) return NotFound();
 
-        var resource = TuristaResourceAssembler.ToResource(usuario.Turista);
+        var resource = TouristResourceAssembler.ToResource(user.Tourist);
         return Ok(resource);
     }
 
@@ -38,16 +38,16 @@ public class TuristaController : ControllerBase
     /// Update tourist profile
     /// </summary>
     [HttpPut("{userId:guid}")]
-    public async Task<IActionResult> Update(Guid userId, [FromBody] UpdateTuristaCommand command)
+    public async Task<IActionResult> Update(Guid userId, [FromBody] UpdateTouristCommand command)
     {
-        var usuario = await _queryService.Handle(new GetUsuarioByIdQuery(userId));
-        if (usuario?.Turista == null) return NotFound();
+        var user = await _queryService.Handle(new GetUserByIdQuery(userId));
+        if (user?.Tourist == null) return NotFound();
 
-        var turista = usuario.Turista;
+        var tourist = user.Tourist;
 
-        turista.AvatarUrl = command.AvatarUrl ?? turista.AvatarUrl;
+        tourist.AvatarUrl = command.AvatarUrl ?? tourist.AvatarUrl;
 
-        await _commandService.UpdateTuristaAsync(userId,command);
-        return Ok(TuristaResourceAssembler.ToResource(turista));
+        await _commandService.UpdateTouristAsync(userId,command);
+        return Ok(TouristResourceAssembler.ToResource(tourist));
     }
 }

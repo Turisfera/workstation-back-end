@@ -59,7 +59,7 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         {
             try
             {
-                // 1. Obtener el ID del usuario (TouristId) del token JWT
+                // 1. Obtener el ID del user (TouristId) del token JWT
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
                 if (userIdClaim == null)
@@ -109,7 +109,7 @@ namespace workstation_back_end.Bookings.Interfaces.REST
             {
                 Console.WriteLine($"Database error when creating a reservation: {ex.Message}");
                 // Puedes ser más específico aquí si quieres manejar diferentes errores de DB
-                if (ex.Message.Contains("FOREIGN KEY constraint fails") && ex.Message.Contains("FK_Bookings_Usuarios_TouristId"))
+                if (ex.Message.Contains("FOREIGN KEY constraint fails") && ex.Message.Contains("FK_Bookings_Users_TouristId"))
                 {
                     return BadRequest(new { message = "The tourist specified for the booking does not exist. Please ensure you are logged in with a valid tourist account." });
                 }

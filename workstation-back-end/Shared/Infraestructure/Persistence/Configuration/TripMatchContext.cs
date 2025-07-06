@@ -6,6 +6,7 @@ using workstation_back_end.Users.Domain.Models.Entities;
 using workstation_back_end.Bookings.Domain.Models.Entities;
 using workstation_back_end.Reviews.Domain.Models.Entities;
 using workstation_back_end.Shared.Domain.Model.Entities;
+using workstation_back_end.Favorites.Domain.Models.Entities;
 
 namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 {
@@ -14,14 +15,15 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
         public DbSet<Experience.Domain.Models.Entities.Experience> Experiences { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Inquiry.Domain.Models.Entities.Inquiry> Inquiries { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<User> Users { get; set; }
         
-        public DbSet<Agencia> Agencias { get; set; } 
+        public DbSet<Agency> Agencies { get; set; } 
         
-        public DbSet<Turista> Turistas { get; set; } 
+        public DbSet<Tourist> Tourists { get; set; } 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
             base.OnConfiguring(builder);
@@ -75,7 +77,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 
                 entity.Property(e => e.AgencyUserId).IsRequired(); 
                 
-                entity.HasOne(e => e.Agencia)
+                entity.HasOne(e => e.Agency)
                     .WithMany(a => a.Experiences) 
                     .HasForeignKey(e => e.AgencyUserId) 
                     .HasPrincipalKey(a => a.UserId);
@@ -147,9 +149,9 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 .HasForeignKey(e => e.CategoryId);
             
             
-            builder.Entity<Usuario>(entity =>
+            builder.Entity<User>(entity =>
             {
-                entity.ToTable("Usuarios");
+                entity.ToTable("Users");
 
                 entity.HasKey(e => e.UserId);
                 entity.Property(e => e.UserId).IsRequired();
@@ -164,22 +166,22 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
 
                 entity.HasIndex(e => e.Email).IsUnique();
 
-                // Relación 1:1 Usuario <-> Agencia
-                entity.HasOne(u => u.Agencia)
-                    .WithOne(a => a.Usuario)
-                    .HasForeignKey<Agencia>(a => a.UserId);
+                // Relación 1:1 User <-> Agency
+                entity.HasOne(u => u.Agency)
+                    .WithOne(a => a.User)
+                    .HasForeignKey<Agency>(a => a.UserId);
 
-                // Relación 1:1 Usuario <-> Turista
-                entity.HasOne(u => u.Turista)
-                    .WithOne(t => t.Usuario)
-                    .HasForeignKey<Turista>(t => t.UserId);
+                // Relación 1:1 User <-> Tourist
+                entity.HasOne(u => u.Tourist)
+                    .WithOne(t => t.User)
+                    .HasForeignKey<Tourist>(t => t.UserId);
                 ConfigureBaseEntity(entity);
             });
 
-            // Agencia
-            builder.Entity<Agencia>(entity =>
+            // Agency
+            builder.Entity<Agency>(entity =>
             {
-                entity.ToTable("Agencias");
+                entity.ToTable("Agencies");
                 
                 entity.HasKey(e => e.UserId);
                 entity.Property(e => e.UserId).IsRequired(); 
@@ -199,17 +201,17 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.SocialLinkWhatsapp).HasMaxLength(100);
                 ConfigureBaseEntity(entity); 
                 
-                entity.HasOne(a => a.Usuario)
-                    .WithOne(u => u.Agencia)
-                    .HasForeignKey<Agencia>(a => a.UserId) 
-                    .HasPrincipalKey<Usuario>(u => u.UserId); 
+                entity.HasOne(a => a.User)
+                    .WithOne(u => u.Agency)
+                    .HasForeignKey<Agency>(a => a.UserId) 
+                    .HasPrincipalKey<User>(u => u.UserId); 
             });
 
 
-            // Turista
-            builder.Entity<Turista>(entity =>
+            // Tourist
+            builder.Entity<Tourist>(entity =>
             {
-                entity.ToTable("Turistas");
+                entity.ToTable("Tourists");
                 
                 entity.HasKey(e => e.UserId);
                 entity.Property(e => e.UserId).IsRequired(); 
@@ -218,10 +220,10 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.AvatarUrl).HasMaxLength(255);
                 ConfigureBaseEntity(entity);
                 
-                entity.HasOne(t => t.Usuario)
-                    .WithOne(u => u.Turista)
-                    .HasForeignKey<Turista>(t => t.UserId) 
-                    .HasPrincipalKey<Usuario>(u => u.UserId); 
+                entity.HasOne(t => t.User)
+                    .WithOne(u => u.Tourist)
+                    .HasForeignKey<Tourist>(t => t.UserId) 
+                    .HasPrincipalKey<User>(u => u.UserId); 
             });
             
             //Inquiry
@@ -234,7 +236,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(i => i.Question).HasMaxLength(500).IsRequired();
                 entity.Property(i => i.AskedAt).IsRequired().HasColumnType("datetime");
 
-                entity.HasOne(i => i.Usuario)
+                entity.HasOne(i => i.User)
                     .WithMany()
                     .HasForeignKey(i => i.UserId);
 
@@ -301,6 +303,26 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                     .HasForeignKey(e => e.ExperienceId);
 
                 ConfigureBaseEntity(entity); 
+            });
+            builder.Entity<Favorite>(entity =>
+            {
+                entity.ToTable("Favorites");
+                entity.HasKey(f => f.Id);
+
+                entity.Property(f => f.TouristId).IsRequired();
+                entity.Property(f => f.ExperienceId).IsRequired();
+
+                entity.HasOne(f => f.Tourist)
+                    .WithMany()
+                    .HasForeignKey(f => f.TouristId)
+                    .HasPrincipalKey(t => t.UserId);
+
+                entity.HasOne(f => f.Experience)
+                    .WithMany()
+                    .HasForeignKey(f => f.ExperienceId)
+                    .HasPrincipalKey(e => e.Id);
+
+                ConfigureBaseEntity(entity);
             });
 
             builder.Entity<Schedule>(entity =>

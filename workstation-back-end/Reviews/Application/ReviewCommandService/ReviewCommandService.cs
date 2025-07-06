@@ -13,35 +13,35 @@ public class ReviewCommandService : IReviewCommandService
 {
     private readonly IReviewRepository _reviewRepository;
     private readonly IBookingRepository _bookingRepository;
-    private readonly IUsuarioRepository _usuarioRepository; 
+    private readonly IUserRepository _userRepository; 
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateReviewCommand> _createReviewCommandValidator;
 
     public ReviewCommandService( IReviewRepository reviewRepository,
         IBookingRepository bookingRepository,
-        IUsuarioRepository usuarioRepository,
+        IUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {
         _reviewRepository = reviewRepository;
         _bookingRepository = bookingRepository;
-        _usuarioRepository = usuarioRepository;
+        _userRepository = userRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task<Review?> Handle(CreateReviewCommand command)
     {
-        var touristUserMain = await _usuarioRepository.FindByGuidAsync(command.TouristUserId);
-        if (touristUserMain == null || touristUserMain.Turista == null) 
+        var touristUserMain = await _userRepository.FindByGuidAsync(command.TouristUserId);
+        if (touristUserMain == null || touristUserMain.Tourist == null) 
         {
             throw new ArgumentException("Tourist user not found or is not a valid tourist profile.");
         }
 
-        var agencyUserMain = await _usuarioRepository.FindByGuidAsync(command.AgencyUserId);
-        if (agencyUserMain == null || agencyUserMain.Agencia == null) 
+        var agencyUserMain = await _userRepository.FindByGuidAsync(command.AgencyUserId);
+        if (agencyUserMain == null || agencyUserMain.Agency == null) 
         {
             throw new ArgumentException("Agency user not found or is not a valid agency profile.");
         }
-        var agency = agencyUserMain.Agencia; 
+        var agency = agencyUserMain.Agency; 
         
 
         var hasCompletedBookingWithAgency = await _bookingRepository.HasCompletedBookingForAgencyViaExperienceAsync( 
@@ -95,8 +95,8 @@ public class ReviewCommandService : IReviewCommandService
     private async Task RecalculateAgencyAverageRatingAndCount(Guid agencyUserId)
     {
 
-        var agencyUserMain = await _usuarioRepository.FindByGuidAsync(agencyUserId); 
-        var agency = agencyUserMain?.Agencia; 
+        var agencyUserMain = await _userRepository.FindByGuidAsync(agencyUserId); 
+        var agency = agencyUserMain?.Agency; 
 
         if (agency == null) return; 
 
@@ -113,7 +113,7 @@ public class ReviewCommandService : IReviewCommandService
             agency.ReviewCount = 0;
         }
         
-        _usuarioRepository.UpdateAgencia(agency); 
+        _userRepository.UpdateAgency(agency); 
         await _unitOfWork.CompleteAsync(); 
     }
 }

@@ -12,28 +12,28 @@ namespace workstation_back_end.Security.Application.SecurityCommandServices;
 
 public class AuthService : IAuthService
 {
-    private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public AuthService(IUsuarioRepository usuarioRepository, ITokenService tokenService, IUnitOfWork unitOfWork)
+    public AuthService(IUserRepository userRepository, ITokenService tokenService, IUnitOfWork unitOfWork)
     {
-        _usuarioRepository = usuarioRepository;
+        _userRepository = userRepository;
         _tokenService = tokenService;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Usuario> SignUpAsync(SignUpCommand command)
+    public async Task<User> SignUpAsync(SignUpCommand command)
     {
 
-        var existingUser = await _usuarioRepository.FindByEmailAsync(command.Email);
+        var existingUser = await _userRepository.FindByEmailAsync(command.Email);
         if (existingUser != null)
             throw new InvalidOperationException("Este correo electrónico ya está registrado.");
 
-        var hasher = new PasswordHasher<Usuario>();
+        var hasher = new PasswordHasher<User>();
 
 
-        var user = new Usuario
+        var user = new User
         {
             UserId = Guid.NewGuid(),
             FirstName = command.FirstName,
@@ -45,12 +45,12 @@ public class AuthService : IAuthService
         };
 
         user.Password = hasher.HashPassword(user, command.Password);
-        await _usuarioRepository.AddAsync(user);
+        await _userRepository.AddAsync(user);
 
         // Crear perfil según rol
-        if (command.Rol?.ToLower() == "agencia")
+        if (command.Rol?.ToLower() == "agency")
         {
-            var agencia = new Agencia
+            var agency = new Agency
             {
                 UserId = user.UserId,
                 AgencyName = command.AgencyName ?? "",
@@ -69,11 +69,11 @@ public class AuthService : IAuthService
                 IsActive = true
             };
 
-            await _usuarioRepository.AddAgenciaAsync(agencia);
+            await _userRepository.AddAgencyAsync(agency);
         }
-        else if (command.Rol?.ToLower() == "turista")
+        else if (command.Rol?.ToLower() == "tourist")
         {
-            var turista = new Turista
+            var tourist = new Tourist
             {
                 UserId = user.UserId,
                 AvatarUrl = "",
@@ -81,7 +81,7 @@ public class AuthService : IAuthService
                 IsActive = true
             };
 
-            await _usuarioRepository.AddTuristaAsync(turista);
+            await _userRepository.AddTouristAsync(tourist);
         }
 
         await _unitOfWork.CompleteAsync();
@@ -90,11 +90,11 @@ public class AuthService : IAuthService
 
     public async Task<AuthResult> SignInAsync(SignInCommand command)
     {
-        var user = await _usuarioRepository.FindByEmailAsync(command.Email);
+        var user = await _userRepository.FindByEmailAsync(command.Email);
         if (user == null)
-            throw new InvalidOperationException("Usuario no encontrado.");
+            throw new InvalidOperationException("User no encontrado.");
 
-        var hasher = new PasswordHasher<Usuario>();
+        var hasher = new PasswordHasher<User>();
         var result = hasher.VerifyHashedPassword(user, user.Password, command.Password);
 
         if (result == PasswordVerificationResult.Failed)
@@ -102,9 +102,9 @@ public class AuthService : IAuthService
 
         var token = _tokenService.GenerateToken(user);
         
-        string rol = user.Agencia != null ? "agencia" :
-            user.Turista != null ? "turista" :
-            "usuario";
+        string rol = user.Agency != null ? "agency" :
+            user.Tourist != null ? "tourist" :
+            "user";
 
         return new AuthResult
         {

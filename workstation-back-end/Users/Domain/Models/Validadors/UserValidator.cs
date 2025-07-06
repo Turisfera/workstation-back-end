@@ -4,11 +4,11 @@ using workstation_back_end.Users.Domain.Models.Commands;
 namespace workstation_back_end.Users.Domain.Models.Validadors;
 
 /// <summary>
-/// Validador para la creación de un usuario base en TripMatch.
+/// Validador para la creación de un user base en TripMatch.
 /// </summary>
-public class CreateUsuarioCommandValidator : AbstractValidator<CreateUsuarioCommand>
+public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
-    public CreateUsuarioCommandValidator()
+    public CreateUserCommandValidator()
     {
         RuleFor(u => u.FirstName)
             .NotEmpty().WithMessage("El nombre es obligatorio.")

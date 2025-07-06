@@ -8,10 +8,10 @@ namespace workstation_back_end.Reviews.Interfaces.REST.Resources;
  * <param name="Rating">Calificación dada.</param>
  * <param name="Comment">Comentario.</param>
  * <param name="Date">Fecha de la reseña.</param>
- * <param name="TouristId">ID del turista que escribió la reseña.</param>
- * <param name="TouristName">Nombre del turista (para conveniencia).</param>
- * <param name="TouristAvatarUrl">URL del avatar del turista (para conveniencia).</param>
- * <param name="AgencyId">ID de la agencia reseñada.</param>
+ * <param name="TouristId">ID del tourist que escribió la reseña.</param>
+ * <param name="TouristName">Nombre del tourist (para conveniencia).</param>
+ * <param name="TouristAvatarUrl">URL del avatar del tourist (para conveniencia).</param>
+ * <param name="AgencyId">ID de la agency reseñada.</param>
  */
 public record ReviewResource(
     int Id,

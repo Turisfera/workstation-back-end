@@ -16,7 +16,7 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string GenerateToken(Usuario user)
+    public string GenerateToken(User user)
     {
         var claims = new[]
         {

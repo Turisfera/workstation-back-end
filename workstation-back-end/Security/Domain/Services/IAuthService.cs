@@ -6,6 +6,6 @@ namespace workstation_back_end.Security.Domain.Services;
 
 public interface IAuthService
 {
-    Task<Usuario> SignUpAsync(SignUpCommand command);
+    Task<User> SignUpAsync(SignUpCommand command);
     Task<AuthResult> SignInAsync(SignInCommand command);
 }

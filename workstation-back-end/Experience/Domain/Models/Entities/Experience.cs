@@ -36,7 +36,7 @@ namespace workstation_back_end.Experience.Domain.Models.Entities {
         public Category Category { get; set; }
         
         public Guid AgencyUserId { get; set; } 
-        public Users.Domain.Models.Entities.Agencia Agencia { get; set; } 
+        public Users.Domain.Models.Entities.Agency Agency { get; set; } 
         public List<Schedule> Schedules { get; } = new();
         public List<ExperienceImage> ExperienceImages { get; } = new();
         public List<Include> Includes { get; } = new();

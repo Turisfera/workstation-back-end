@@ -1,6 +1,6 @@
 namespace workstation_back_end.Users.Domain.Models.Commands;
 
-public class UpdateAgenciaCommand
+public class UpdateAgencyCommand
 {
     public string? AgencyName { get; set; }
     public string? Ruc { get; set; }

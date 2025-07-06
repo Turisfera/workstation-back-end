@@ -4,5 +4,5 @@ namespace workstation_back_end.Security.Domain.Services;
 
 public interface ITokenService
 {
-    string GenerateToken(Usuario user);
+    string GenerateToken(User user);
 }

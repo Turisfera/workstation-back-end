@@ -8,15 +8,15 @@ namespace workstation_back_end.Users.Application.QueryServices;
 
 public class UserQueryService : IUserQueryService
 {
-    private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IUserRepository _userRepository;
 
-    public UserQueryService(IUsuarioRepository usuarioRepository)
+    public UserQueryService(IUserRepository userRepository)
     {
-        _usuarioRepository = usuarioRepository ?? throw new ArgumentNullException(nameof(usuarioRepository));
+        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     }
 
-    public async Task<Usuario?> Handle(GetUsuarioByIdQuery query)
+    public async Task<User?> Handle(GetUserByIdQuery query)
     {
-        return await _usuarioRepository.FindByGuidAsync(query.UserId);
+        return await _userRepository.FindByGuidAsync(query.UserId);
     }
 }   

@@ -4,9 +4,9 @@ namespace workstation_back_end.Users.Domain.Models.Entities;
 
 
 /// <summary>
-/// Representa a un usuario con perfil de agencia.
+/// Representa a un user con perfil de agency.
 /// </summary>
-public class Agencia : BaseEntity
+public class Agency : BaseEntity
 {
     public Guid UserId { get; set; }
 
@@ -34,7 +34,7 @@ public class Agencia : BaseEntity
 
     public string? SocialLinkWhatsapp { get; set; }
 
-    public Usuario? Usuario { get; set; }
+    public User? User { get; set; }
     
     public ICollection<workstation_back_end.Experience.Domain.Models.Entities.Experience> Experiences { get; set; } = new List<workstation_back_end.Experience.Domain.Models.Entities.Experience>();
 }

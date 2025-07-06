@@ -3,9 +3,9 @@ using workstation_back_end.Shared.Domain.Model.Entities;
 namespace workstation_back_end.Users.Domain.Models.Entities;
 
 /// <summary>
-/// Representa a un usuario base en TripMatch. Puede ser una agencia o un turista.
+/// Representa a un user base en TripMatch. Puede ser una agency o un tourist.
 /// </summary>
-public class Usuario : BaseEntity
+public class User : BaseEntity
 {
     public Guid UserId { get; set; }
 
@@ -19,7 +19,7 @@ public class Usuario : BaseEntity
 
     public string Password { get; set; } = string.Empty;
 
-    public Turista? Turista { get; set; }
+    public Tourist? Tourist { get; set; }
 
-    public Agencia? Agencia { get; set; }
+    public Agency? Agency { get; set; }
 }

@@ -17,7 +17,7 @@ public class Booking : BaseEntity
     public int ExperienceId { get; set; }
     public Experience.Domain.Models.Entities.Experience Experience { get; set; } = null!;
     public Guid TouristId { get; set; }       
-    public workstation_back_end.Users.Domain.Models.Entities.Usuario Tourist { get; set; } = null!;
+    public workstation_back_end.Users.Domain.Models.Entities.User Tourist { get; set; } = null!;
 
     public Booking() { }
 

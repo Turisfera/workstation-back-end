@@ -6,5 +6,5 @@ namespace workstation_back_end.Users.Domain.Services;
 
 public interface IUserQueryService
 {
-    Task<Usuario?> Handle(GetUsuarioByIdQuery query);
+    Task<User?> Handle(GetUserByIdQuery query);
 }

@@ -13,7 +13,7 @@ namespace workstation_back_end.Bookings.Interfaces.REST.Resources;
  * <param name="Status">Estado actual de la reserva.</param>
  * <param name="ExperienceId">ID de la experiencia reservada.</param>
  * <param name="ExperienceTitle">Título de la experiencia .</param>
- * <param name="TouristId">ID del turista que hizo la reserva.</param>
+ * <param name="TouristId">ID del tourist que hizo la reserva.</param>
  */
 public record BookingResource(
     int Id,

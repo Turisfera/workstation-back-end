@@ -20,10 +20,10 @@ public interface IBookingQueryService
 
     /**
      * <summary>
-     * Maneja la consulta para obtener todas las reservas de un turista.
+     * Maneja la consulta para obtener todas las reservas de un tourist.
      * </summary>
-     * <param name="query">La consulta con el ID del turista.</param>
-     * <returns>Una colección de las reservas del turista.</returns>
+     * <param name="query">La consulta con el ID del tourist.</param>
+     * <returns>Una colección de las reservas del tourist.</returns>
      */
     Task<IEnumerable<Models.Entities.Booking>> Handle(GetBookingsByTouristIdQuery query);
     

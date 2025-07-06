@@ -4,14 +4,14 @@ using workstation_back_end.Users.Interfaces.REST.Resources;
 namespace workstation_back_end.Users.Interfaces.REST.Transform;
 
 
-public static class TuristaResourceAssembler
+public static class TouristResourceAssembler
 {
-    public static TuristaResource ToResource(Turista turista)
+    public static TouristResource ToResource(Tourist tourist)
     {
-        return new TuristaResource
+        return new TouristResource
         {
-            UserId = turista.UserId,
-            AvatarUrl = turista.AvatarUrl
+            UserId = tourist.UserId,
+            AvatarUrl = tourist.AvatarUrl
         };
     }
 }

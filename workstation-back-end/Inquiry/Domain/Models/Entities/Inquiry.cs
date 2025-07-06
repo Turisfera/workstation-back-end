@@ -10,7 +10,7 @@ public class Inquiry : BaseEntity
     public Experience.Domain.Models.Entities.Experience Experience { get; set; }
 
     public Guid UserId { get; set; } 
-    public Usuario Usuario { get; set; }
+    public User User { get; set; }
     
     public string Question { get; set; } = string.Empty;
 

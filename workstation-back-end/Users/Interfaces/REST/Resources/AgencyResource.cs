@@ -1,7 +1,7 @@
 namespace workstation_back_end.Users.Interfaces.REST.Resources;
 
 
-public class AgenciaResource
+public class AgencyResource
 {
     public Guid UserId { get; set; }
     public string AgencyName { get; set; }

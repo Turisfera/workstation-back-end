@@ -4,10 +4,10 @@ using workstation_back_end.Users.Domain;
 
 namespace workstation_back_end.Experience.Domain.Models.Queries
 {
-    public class ExperienceQueryService(IExperienceRepository experienceRepository, IUsuarioRepository usuarioRepository) : IExperienceQueryService
+    public class ExperienceQueryService(IExperienceRepository experienceRepository, IUserRepository userRepository) : IExperienceQueryService
     {
         private readonly IExperienceRepository _experienceRepository = experienceRepository;
-        private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
+        private readonly IUserRepository _userRepository = userRepository;
         public async Task<IEnumerable<Domain.Models.Entities.Experience>> Handle(GetAllExperiencesQuery query)
         {
             return await experienceRepository.ListAsync();
@@ -23,8 +23,8 @@ namespace workstation_back_end.Experience.Domain.Models.Queries
         
         public async Task<IEnumerable<Entities.Experience>> Handle(GetExperiencesByAgencyQuery query)
         {
-            var agencyUser = await _usuarioRepository.FindByGuidAsync(query.AgencyUserId);
-            if (agencyUser == null || agencyUser.Agencia == null)
+            var agencyUser = await _userRepository.FindByGuidAsync(query.AgencyUserId);
+            if (agencyUser == null || agencyUser.Agency == null)
             {
                 return new List<Entities.Experience>(); 
             }

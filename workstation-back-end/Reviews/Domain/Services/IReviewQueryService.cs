@@ -7,9 +7,9 @@ public interface IReviewQueryService
 {
     /**
      * <summary>
-     * Maneja la consulta para obtener todas las reseñas de una agencia.
+     * Maneja la consulta para obtener todas las reseñas de una agency.
      * </summary>
-     * <param name="query">La consulta con el ID de la agencia.</param>
+     * <param name="query">La consulta con el ID de la agency.</param>
      * <returns>Una colección de reseñas.</returns>
      */
     Task<IEnumerable<Review>> Handle(GetReviewsByAgencyIdQuery query);

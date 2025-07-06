@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
     ///     }
     ///
     /// Notes:
-    /// - The role can be "agencia" o "turista"
+    /// - The role can be "agency" o "tourist"
     /// - If the role is "tourist", those fields can be empty or omitted.
     /// </remarks>
     /// <param name="command">The command with registration data.</param>
@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> SignUp([FromBody] SignUpCommand command)
     {
         var user = await _authService.SignUpAsync(command);
-        return Ok(new { message = "Usuario registrado con éxito", user.Email });
+        return Ok(new { message = "User registrado con éxito", user.Email });
     }
     
     /// <summary>
