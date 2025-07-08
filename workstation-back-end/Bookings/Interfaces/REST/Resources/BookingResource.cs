@@ -24,5 +24,6 @@ public record BookingResource(
     int ExperienceId,
     Guid TouristId,
     string Time,
-    ExperienceResource Experience 
+    ExperienceResource Experience
+    
 );

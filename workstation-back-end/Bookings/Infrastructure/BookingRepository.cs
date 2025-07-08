@@ -47,6 +47,7 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
     public async Task<IEnumerable<Booking>> ListAllWithExperienceAsync()
     {
         return await _context.Bookings
+            .Include(b => b.Tourist) 
             .Include(b => b.Experience)
                 .ThenInclude(e => e.ExperienceImages)
             .Include(b => b.Experience)

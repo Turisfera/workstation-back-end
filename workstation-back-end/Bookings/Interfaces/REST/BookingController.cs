@@ -199,8 +199,9 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         public async Task<IActionResult> GetAllBookings()
         {
             var query = new GetAllBookingsQuery();
-            var bookings = await _bookingQueryService.Handle(query);
-            var resources = bookings.Select(BookingAssembler.ToResourceFromEntity);
+            var bookings = await _bookingQueryService.Handle(query); 
+            var resources = bookings.Select(BookingAssembler.ToResourceFromEntity); 
+    
             return Ok(resources);
         }
     }
