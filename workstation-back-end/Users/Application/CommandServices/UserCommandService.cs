@@ -125,4 +125,22 @@ public class UserCommandService : IUserCommandService
         _userRepository.Remove(user);
         await _unitOfWork.CompleteAsync();
     }
+    public async Task<User> Handle(Guid userId, UpdateUserCommand command)
+    {
+        var user = await _userRepository.FindByGuidAsync(userId);
+        if (user == null)
+        {
+            throw new Exception("User no encontrado");
+        }
+
+        user.FirstName = command.FirstName;
+        user.LastName = command.LastName;
+        user.Number = command.Number;
+        user.ModifiedDate = DateTime.UtcNow;
+
+        _userRepository.Update(user);
+        await _unitOfWork.CompleteAsync();
+        return user;
+    }
+    
 }

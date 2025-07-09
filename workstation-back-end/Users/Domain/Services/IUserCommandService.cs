@@ -10,5 +10,6 @@ public interface IUserCommandService
     Task UpdateAgencyAsync(Guid userId, UpdateAgencyCommand command);
     Task UpdateTouristAsync(Guid userId, UpdateTouristCommand command);
     Task DeleteUserAsync(Guid userId);
+    Task<User> Handle(Guid userId, UpdateUserCommand command);
 
 }

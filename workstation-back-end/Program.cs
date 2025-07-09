@@ -1,20 +1,30 @@
 using System.Reflection;
+using System.Text;
+using System.Text.Json; 
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using workstation_back_end.Bookings.Application.BookingCommandService;
+using workstation_back_end.Bookings.Application.BookingQueryService;
+using workstation_back_end.Bookings.Domain;
+using workstation_back_end.Bookings.Domain.Models.Commands;
+using workstation_back_end.Bookings.Domain.Models.Validators;
+using workstation_back_end.Bookings.Domain.Services;
+using workstation_back_end.Bookings.Infrastructure;
 using workstation_back_end.Experience.Application.ExperienceCommandServices;
 using workstation_back_end.Experience.Domain;
-using workstation_back_end.Experience.Domain.Models.Queries;
 using workstation_back_end.Experience.Domain.Models.Validators;
 using workstation_back_end.Experience.Domain.Services;
-using workstation_back_end.Shared.Domain.Repositories;
-using workstation_back_end.Shared.Infraestructure.Persistence.Configuration;
-using workstation_back_end.Shared.Infraestructure.Persistence.Repositories;
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using workstation_back_end.Experience.Infraestructure;
+using workstation_back_end.Favorites.Application.FavoriteCommandService;
+using workstation_back_end.Favorites.Application.FavoriteQueryService;
+using workstation_back_end.Favorites.Domain;
+using workstation_back_end.Experience.Domain.Models.Queries; 
+using workstation_back_end.Favorites.Domain.Models.Validators;
+using workstation_back_end.Favorites.Domain.Services;
+using workstation_back_end.Favorites.Infrastructure;
 using workstation_back_end.Inquiry.Application.CommandServices;
 using workstation_back_end.Inquiry.Application.QueryServices;
 using workstation_back_end.Inquiry.Domain.Models.Commands;
@@ -22,23 +32,6 @@ using workstation_back_end.Inquiry.Domain.Services;
 using workstation_back_end.Inquiry.Domain.Services.Models.Validators;
 using workstation_back_end.Inquiry.Domain.Services.Services;
 using workstation_back_end.Inquiry.Infraestructure;
-using workstation_back_end.Security.Domain.Services;
-using workstation_back_end.Security.Application.SecurityCommandServices;
-using workstation_back_end.Security.Application.TokenServices;
-using workstation_back_end.Users.Domain;
-using workstation_back_end.Users.Domain.Services;
-using workstation_back_end.Users.Infrastructure;
-using workstation_back_end.Users.Application.CommandServices;
-using workstation_back_end.Users.Application.QueryServices;
-using workstation_back_end.Users.Domain.Models.Validadors;
-
-using workstation_back_end.Bookings.Domain;
-using workstation_back_end.Bookings.Infrastructure;
-using workstation_back_end.Bookings.Domain.Services;
-using workstation_back_end.Bookings.Application.BookingCommandService;
-using workstation_back_end.Bookings.Application.BookingQueryService;
-using workstation_back_end.Bookings.Domain.Models.Commands;
-using workstation_back_end.Bookings.Domain.Models.Validators;
 using workstation_back_end.Reviews.Application.ReviewCommandService;
 using workstation_back_end.Reviews.Application.ReviewQueryService;
 using workstation_back_end.Reviews.Domain;
@@ -46,14 +39,18 @@ using workstation_back_end.Reviews.Domain.Models.Commands;
 using workstation_back_end.Reviews.Domain.Models.Validators;
 using workstation_back_end.Reviews.Domain.Services;
 using workstation_back_end.Reviews.Infrastructure;
-
-
-using workstation_back_end.Favorites.Domain;
-using workstation_back_end.Favorites.Domain.Services;
-using workstation_back_end.Favorites.Domain.Models.Validators;
-using workstation_back_end.Favorites.Infrastructure;
-using workstation_back_end.Favorites.Application.FavoriteCommandService;
-using workstation_back_end.Favorites.Application.FavoriteQueryService;
+using workstation_back_end.Security.Application.SecurityCommandServices;
+using workstation_back_end.Security.Application.TokenServices;
+using workstation_back_end.Security.Domain.Services;
+using workstation_back_end.Shared.Domain.Repositories;
+using workstation_back_end.Shared.Infraestructure.Persistence.Configuration;
+using workstation_back_end.Shared.Infraestructure.Persistence.Repositories;
+using workstation_back_end.Users.Application.CommandServices;
+using workstation_back_end.Users.Application.QueryServices;
+using workstation_back_end.Users.Domain;
+using workstation_back_end.Users.Domain.Models.Validadors;
+using workstation_back_end.Users.Domain.Services;
+using workstation_back_end.Users.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +67,7 @@ builder.Services.AddSwaggerGen(options =>
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    
+
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -99,10 +96,18 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Controllers
+// ----- 2. SE MODIFICÓ ESTA SECCIÓN PARA AÑADIR LA CONFIGURACIÓN DE JSON -----
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter());
+}).AddJsonOptions(options =>
+{
+    // Configura la API para que devuelva las propiedades en camelCase (ej: "firstName")
+    // en lugar de PascalCase (ej: "FirstName"), que es lo que JavaScript espera.
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
+// -------------------------------------------------------------------------
+
 
 // === JWT Auth ===
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -121,7 +126,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization(); 
+builder.Services.AddAuthorization();
 
 // === CORS ===
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -211,7 +216,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseCors("_myAllowSpecificOrigins");
 app.UseAuthorization();
 app.MapControllers();

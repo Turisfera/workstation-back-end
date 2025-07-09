@@ -17,9 +17,12 @@ public class ExperienceRepository : BaseRepository<Experience>, IExperienceRepos
     public async Task<IEnumerable<Experience>> ListAsync()
     {
         return await _context.Experiences
+            .Include(e => e.Agency)
             .Include(e => e.ExperienceImages)
             .Include(e => e.Includes)
             .Include(e => e.Schedules)
+            .Include(e => e.Agency)
+            .Include(e => e.Category)
             .ToListAsync();
     }
     
@@ -28,6 +31,7 @@ public class ExperienceRepository : BaseRepository<Experience>, IExperienceRepos
     {
         return await _context.Set<Experience>()
             .Where(e => e.CategoryId == categoryId && e.IsActive)
+            .Include(e => e.Agency) 
             .Include(e => e.ExperienceImages)
             .Include(e => e.Includes)
             .Include(e => e.Schedules)
@@ -37,7 +41,8 @@ public class ExperienceRepository : BaseRepository<Experience>, IExperienceRepos
     public async Task<Experience?> FindByIdAsync(int id)
     {
         return await _context.Experiences
-            .Include(e => e.Schedules) 
+            .Include(e => e.Schedules)
+            .Include(e => e.Agency)
             .Include(e => e.ExperienceImages)
             .Include(e => e.Includes)
             .FirstOrDefaultAsync(e => e.Id == id);
