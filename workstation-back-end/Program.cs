@@ -137,7 +137,8 @@ builder.Services.AddCors(options =>
                     "http://localhost:5173",          
                     "http://localhost:8080")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 
@@ -199,7 +200,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateFavoriteCommandValida
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.WebHost.UseUrls("http://localhost:5000");
+//builder.WebHost.UseUrls("http://localhost:5000");
 
 var app = builder.Build();
 
