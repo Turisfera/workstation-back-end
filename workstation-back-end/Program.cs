@@ -95,15 +95,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Controllers
-// ----- 2. SE MODIFICÓ ESTA SECCIÓN PARA AÑADIR LA CONFIGURACIÓN DE JSON -----
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter());
 }).AddJsonOptions(options =>
 {
-    // Configura la API para que devuelva las propiedades en camelCase (ej: "firstName")
-    // en lugar de PascalCase (ej: "FirstName"), que es lo que JavaScript espera.
+
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 // -------------------------------------------------------------------------
@@ -136,7 +133,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("https://trip-match-2025.web.app", 
+                    "http://localhost:5173",          
+                    "http://localhost:8080")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -204,11 +203,10 @@ builder.WebHost.UseUrls("http://localhost:5000");
 
 var app = builder.Build();
 
-// Swagger middleware
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Verificar creación de BD
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<TripMatchContext>();
