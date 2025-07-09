@@ -83,7 +83,6 @@ public class UserCommandService : IUserCommandService
         user.Agency.AgencyName = command.AgencyName;
         user.Agency.Ruc = command.Ruc;
         user.Agency.Description = command.Description;
-        // Validar campos tipo valor (nullable)
         if (command.Rating.HasValue)
             user.Agency.Rating = command.Rating.Value;
 

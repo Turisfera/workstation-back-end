@@ -21,13 +21,16 @@ public class ExperienceController : ControllerBase
 {
     private readonly IExperienceQueryService _experienceQueryService;
     private readonly IExperienceCommandService _experienceCommandService;
+    private readonly ICategoryRepository _categoryRepository;
 
     public ExperienceController(
         IExperienceQueryService experienceQueryService,
-        IExperienceCommandService experienceCommandService)
+        IExperienceCommandService experienceCommandService, 
+        ICategoryRepository categoryRepository)
     {
         _experienceQueryService = experienceQueryService;
         _experienceCommandService = experienceCommandService;
+        _categoryRepository = categoryRepository;
     }
 
     /// <summary>
@@ -35,17 +38,56 @@ public class ExperienceController : ControllerBase
     /// </summary>
     /// <response code="200">Returns the list of experiences</response>
     /// <response code="404">If no experiences are found</response>
-    [HttpGet]
-    [AllowAnonymous] 
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAll()
+[HttpGet]
+[AllowAnonymous]
+[ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+public async Task<IActionResult> GetAll(
+    [FromQuery] string? destination = null,
+    [FromQuery] string? day = null, 
+    [FromQuery] string? experienceType = null,
+    [FromQuery] decimal? budget = null)
+{
+    var experiences = await _experienceQueryService.Handle(new GetAllExperiencesQuery()); 
+
+    var filteredExperiences = experiences.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(destination))
     {
-        var query = new GetAllExperiencesQuery(); 
-        var experiences = await _experienceQueryService.Handle(query);
-        var resources = experiences.Select(ExperienceResourceFromEntityAssembler.ToResourceFromEntity);
-        return resources.Any() ? Ok(resources) : NotFound("No experiences found.");
+        filteredExperiences = filteredExperiences.Where(e => e.Location.ToLower().Contains(destination.ToLower()));
     }
+
+    if (!string.IsNullOrWhiteSpace(day)) 
+    {
+        filteredExperiences = filteredExperiences.Where(e => e.Frequencies.ToLower() == day.ToLower());
+    }
+
+    if (!string.IsNullOrWhiteSpace(experienceType))
+    {
+        var categories = await _categoryRepository.ListAsync();
+        var matchingCategoryIds = categories
+            .Where(c => c.Name.ToLower().Contains(experienceType.ToLower()))
+            .Select(c => c.Id)
+            .ToList();
+
+        if (matchingCategoryIds.Any())
+        {
+            filteredExperiences = filteredExperiences.Where(e => matchingCategoryIds.Contains(e.CategoryId));
+        }
+        else
+        {
+            filteredExperiences = Enumerable.Empty<Domain.Models.Entities.Experience>().AsQueryable();
+        }
+    }
+
+    if (budget.HasValue)
+    {
+        filteredExperiences = filteredExperiences.Where(e => e.Price <= budget.Value);
+    }
+
+    var resources = filteredExperiences.Select(ExperienceResourceFromEntityAssembler.ToResourceFromEntity);
+    return resources.Any() ? Ok(resources) : NotFound("No experiences found matching the criteria.");
+}
 
     /// <summary>
     /// Creates a new tourism experience.
@@ -219,4 +261,5 @@ public class ExperienceController : ControllerBase
         var resources = experiences.Select(ExperienceResourceFromEntityAssembler.ToResourceFromEntity);
         return resources.Any() ? Ok(resources) : NotFound($"No experiences found for agency with User ID {agencyUserId} or agency does not exist.");
     }
+    
 }

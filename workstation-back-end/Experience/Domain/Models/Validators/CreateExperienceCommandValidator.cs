@@ -7,7 +7,7 @@ public class CreateExperienceCommandValidator  : AbstractValidator<CreateExperie
 {
     
     private const int MaxTitleLength = 100;
-    private const int MaxDescriptionLength = 500;
+    private const int MaxDescriptionLength = 800;
     private const int MaxLocationLength = 60;
     private const int MaxFrequenciesLength = 100;
     private const int MinImagesCount = 1;

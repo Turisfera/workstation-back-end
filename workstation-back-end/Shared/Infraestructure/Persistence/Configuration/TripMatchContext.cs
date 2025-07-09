@@ -193,7 +193,7 @@ namespace workstation_back_end.Shared.Infraestructure.Persistence.Configuration
                 entity.Property(e => e.Rating);
                 entity.Property(e => e.ReviewCount);
                 entity.Property(e => e.ReservationCount);
-                entity.Property(e => e.AvatarUrl).HasMaxLength(255);
+                entity.Property(e => e.AvatarUrl).HasMaxLength(700);
                 entity.Property(e => e.ContactEmail).HasMaxLength(100);
                 entity.Property(e => e.ContactPhone).HasMaxLength(20);
                 entity.Property(e => e.SocialLinkFacebook).HasMaxLength(100);
