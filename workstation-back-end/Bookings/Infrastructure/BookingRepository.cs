@@ -19,14 +19,14 @@ public class BookingRepository : BaseRepository<Booking>, IBookingRepository
     {
         return await _context.Bookings
             .Where(b => b.TouristId == touristId)
-            .Include(b => b.Experience) // Incluye la experiencia
-                .ThenInclude(e => e.ExperienceImages) // Luego sus imágenes
-            .Include(b => b.Experience) // Para las siguientes, repite el Include(b => b.Experience)
-                .ThenInclude(e => e.Schedules) // Luego sus horarios
+            .Include(b => b.Experience) 
+                .ThenInclude(e => e.ExperienceImages) 
+            .Include(b => b.Experience) 
+                .ThenInclude(e => e.Schedules) 
             .Include(b => b.Experience)
-                .ThenInclude(e => e.Category) // ¡Ahora sí, la categoría!
+                .ThenInclude(e => e.Category) 
             .Include(b => b.Experience)
-                .ThenInclude(e => e.Agency) // ¡Y la agency!
+                .ThenInclude(e => e.Agency)
             .ToListAsync();
     }
 
