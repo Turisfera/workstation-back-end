@@ -59,12 +59,12 @@ namespace workstation_back_end.Bookings.Interfaces.REST
         {
             try
             {
-                // 1. Obtener el ID del user (TouristId) del token JWT
+         
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
                 if (userIdClaim == null)
                 {
-                    // Esto indica un problema con el token o la configuración de autenticación
+                    
                     return Unauthorized("User ID claim not found in token. Please log in again.");
                 }
 
@@ -76,7 +76,7 @@ namespace workstation_back_end.Bookings.Interfaces.REST
                 
                 var commandWithTouristId = command with { TouristId = touristId }; 
 
-                // 3. Pasar el comando modificado al servicio
+
                 var booking = await _bookingCommandService.Handle(commandWithTouristId); 
                 
                 if (booking is null) 
@@ -101,32 +101,32 @@ namespace workstation_back_end.Bookings.Interfaces.REST
                     errors = errors
                 });
             }
-            catch (ArgumentException ex) // Para "Experience not found" u otros ArgumentException
+            catch (ArgumentException ex) 
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (MySqlException ex) // <--- Manejo específico para errores de MySQL
+            catch (MySqlException ex) 
             {
                 Console.WriteLine($"Database error when creating a reservation: {ex.Message}");
-                // Puedes ser más específico aquí si quieres manejar diferentes errores de DB
+               
                 if (ex.Message.Contains("FOREIGN KEY constraint fails") && ex.Message.Contains("FK_Bookings_Users_TouristId"))
                 {
                     return BadRequest(new { message = "The tourist specified for the booking does not exist. Please ensure you are logged in with a valid tourist account." });
                 }
-                // Si hay otro error de FK (ej. ExperienceId no existe)
+
                 else if (ex.Message.Contains("FOREIGN KEY constraint fails") && ex.Message.Contains("FK_Bookings_Experiences_ExperienceId"))
                 {
                      return BadRequest(new { message = "The experience specified for the booking does not exist." });
                 }
                 return Problem(detail: "A database error occurred while creating the booking.", statusCode: StatusCodes.Status500InternalServerError);
             }
-            catch (ApplicationException ex) // Para errores controlados de tu dominio (como el "Could not create the booking due to a database error.")
+            catch (ApplicationException ex) 
             {
                 Console.WriteLine($"Application error when creating a reservation: {ex.Message}");
-                // En producción, podrías querer un mensaje más genérico para el cliente.
+
                 return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
             }
-            catch (Exception ex) // Para cualquier otra excepción inesperada
+            catch (Exception ex) 
             {
                 Console.WriteLine($"Unexpected error creating reservation: {ex.Message}");
                 return Problem(detail: "An internal server error occurred.", statusCode: StatusCodes.Status500InternalServerError);

@@ -214,9 +214,9 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
+app.UseCors("_myAllowSpecificOrigins");
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseCors("_myAllowSpecificOrigins");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -29,23 +29,23 @@ public class UserController : ControllerBase
         var user = await _queryService.Handle(new GetUserByIdQuery(userId));
         if (user == null) return NotFound();
 
-        // Si el usuario es un turista, devolvemos un objeto de perfil más completo.
+
         if (user.Tourist != null)
         {
             return Ok(new
             {
                 UserId = user.UserId,
-                Name = $"{user.FirstName} {user.LastName}", // Nombre completo combinado
+                Name = $"{user.FirstName} {user.LastName}", 
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Phone = user.Number, // Renombrado para que coincida con el frontend
+                Phone = user.Number, 
                 AvatarUrl = user.Tourist.AvatarUrl,
-                Country = "" // Puedes añadir este campo a tu entidad User o Tourist si lo necesitas
+                Country = "" 
             });
         }
         
-        // Para otros tipos de usuario (o si no es turista), se devuelve el recurso básico.
+        
         var resource = UserResourceFromEntityAssembler.ToResource(user);
         return Ok(resource);
     }
@@ -58,15 +58,12 @@ public class UserController : ControllerBase
     {
         try
         {
-            // Llama al servicio para actualizar los datos base del usuario.
-            // Asegúrate de haber implementado Handle(Guid, UpdateUserCommand) en tu UserCommandService.
             var updatedUser = await _commandService.Handle(userId, command);
             var resource = UserResourceFromEntityAssembler.ToResource(updatedUser);
             return Ok(resource);
         }
         catch (Exception ex)
         {
-            // Captura excepciones, como "usuario no encontrado", y devuelve un error claro.
             return BadRequest(new { message = ex.Message });
         }
     }
