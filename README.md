@@ -3,7 +3,7 @@
 
 API REST desarrollada en **C# / .NET** para la plataforma **TripMatch** del ecosistema **Turisfera**. Este backend gestiona la información de experiencias turísticas, consultas, usuarios, reservas y servicios internos utilizados por agentes de turismo.
 
-El sistema está diseñado para ser escalable, seguro y de fácil integración con el frontend desarrollado en Vue 3.
+El sistema implementa una arquitectura escalable basada en **Domain-Driven Design (DDD)**, asegurando la seguridad y eficiencia necesarias para el flujo operativo de los agentes turísticos.
 
 ---
 
